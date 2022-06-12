@@ -4,6 +4,8 @@ treedude is a clone of [the mini-game from Superhot titled 'Tree Dude Tree Dude 
 
 Written in ANSI C with the Curses library, complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/).
 
+![treedude demo gif](.img/treedude.gif)
+
 ## Installation
 
 Ensure the following is available on your system:
