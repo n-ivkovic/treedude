@@ -5,19 +5,12 @@
 
 #include "common.h"
 
-/* End big text stage */
-typedef enum bigTextStage {
-	TREE_DUDE,
-	DUDE_DEAD,
-	DEAD_DUDE
-} bigTextStage_t;
-
 /* End data */
 typedef struct end {
 	loop_t loops;
 	fade_t fade;
 	shown_t shown;
-	bigTextStage_t bigTextStage;
+	unsigned int bigTextsTopStage;
 	sprite_t bigTextL;
 	sprite_t bigTextR;
 	sprite_t bigTextScore;

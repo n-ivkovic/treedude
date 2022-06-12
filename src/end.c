@@ -3,6 +3,7 @@
 #define BIGTEXT_TOP_Y 3
 #define BIGTEXT_SCORE_Y BIGTEXT_TOP_Y + 1 + BIGTEXT_ROWS
 #define BIGTEXT_SCORE_PADDING 4
+#define MAX_BIGTEXT_TOP_STAGE 2
 
 #define TEXT_HIGHSCORE_OLD_START_STR "--PERSONAL-BEST-"
 #define TEXT_HIGHSCORE_OLD_START_LEN strlen(TEXT_HIGHSCORE_OLD_START_STR)
@@ -50,26 +51,48 @@
 #define BIGTEXT_9_COLS strlen(BIGTEXT_9_STR) / BIGTEXT_ROWS
 #define BIGTEXT_9_SIZE BIGTEXT_ROWS * BIGTEXT_9_COLS + 1
 
+static void setBigTextsTop(end_t *e)
+{
+	switch (e->bigTextsTopStage) {
+		/* Dude Dead */
+		case 0:
+			strncpy(e->bigTextL.str, BIGTEXT_DUDE_STR, BIGTEXT_DUDE_SIZE);
+			strncpy(e->bigTextR.str, BIGTEXT_DEAD_STR, BIGTEXT_DEAD_SIZE);
+			e->bigTextL.size.cols = BIGTEXT_DUDE_COLS;
+			e->bigTextR.size.cols = BIGTEXT_DEAD_COLS;
+			break;
+		/* Dead Dude */
+		case 1:
+			strncpy(e->bigTextL.str, BIGTEXT_DEAD_STR, BIGTEXT_DEAD_SIZE);
+			strncpy(e->bigTextR.str, BIGTEXT_DUDE_STR, BIGTEXT_DUDE_SIZE);
+			e->bigTextL.size.cols = BIGTEXT_DEAD_COLS;
+			e->bigTextR.size.cols = BIGTEXT_DUDE_COLS;
+			break;
+		/* Tree Dude */
+		case 2:
+			strncpy(e->bigTextL.str, BIGTEXT_TREE_STR, BIGTEXT_TREE_SIZE);
+			strncpy(e->bigTextR.str, BIGTEXT_DUDE_STR, BIGTEXT_DUDE_SIZE);
+			e->bigTextL.size.cols = BIGTEXT_TREE_COLS;
+			e->bigTextR.size.cols = BIGTEXT_DUDE_COLS;
+			break;
+	}
+}
+
 void initEnd(end_t *e)
 {
 	e->loops = 0;
 	e->fade = IN;
 	e->shown = SHOWN_MIN;
-	e->bigTextStage = TREE_DUDE;
+	e->bigTextsTopStage = 0;
 
-	/* Big text top left */
-	strncpy(e->bigTextL.str, BIGTEXT_TREE_STR, BIGTEXT_TREE_SIZE);
+	/* Top big texts */
 	e->bigTextL.size.rows = BIGTEXT_ROWS;
-	e->bigTextL.size.cols = BIGTEXT_TREE_COLS;
-	e->bigTextL.pos.y = BIGTEXT_TOP_Y;
-	e->bigTextL.pos.x = WIN_COLS / 2 - BIGTEXT_TREE_COLS;
-
-	/* Big text top right */
-	strncpy(e->bigTextR.str, BIGTEXT_DUDE_STR, BIGTEXT_DUDE_SIZE);
 	e->bigTextR.size.rows = BIGTEXT_ROWS;
-	e->bigTextR.size.cols = BIGTEXT_DUDE_COLS;
+	e->bigTextL.pos.y = BIGTEXT_TOP_Y;
 	e->bigTextR.pos.y = BIGTEXT_TOP_Y;
+	e->bigTextL.pos.x = WIN_COLS / 2 - BIGTEXT_TREE_COLS;
 	e->bigTextR.pos.x = WIN_COLS / 2 + 3;
+	setBigTextsTop(e);
 
 	/* Big text score */
 	strncpy(e->bigTextScore.str, BIGTEXT_SCORE_STR, BIGTEXT_SCORE_SIZE);
@@ -193,27 +216,11 @@ void updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore,
 
 	/* Change big text every 0.75s after 0.5s */
 	if (e->loops > LOOPS_PER_SEC / 2 && (e->loops + LOOPS_PER_SEC / 2) % ((LOOPS_PER_SEC / 4) * 3) == 0) {
-		switch (e->bigTextStage) {
-			case TREE_DUDE:
-				e->bigTextStage = DUDE_DEAD;
-				strncpy(e->bigTextL.str, BIGTEXT_DUDE_STR, BIGTEXT_DUDE_SIZE);
-				strncpy(e->bigTextR.str, BIGTEXT_DEAD_STR, BIGTEXT_DEAD_SIZE);
-				e->bigTextL.size.cols = BIGTEXT_DUDE_COLS;
-				e->bigTextR.size.cols = BIGTEXT_DEAD_COLS;
-				break;
-			case DUDE_DEAD:
-				e->bigTextStage = DEAD_DUDE;
-				strncpy(e->bigTextL.str, BIGTEXT_DEAD_STR, BIGTEXT_DEAD_SIZE);
-				strncpy(e->bigTextR.str, BIGTEXT_DUDE_STR, BIGTEXT_DUDE_SIZE);
-				e->bigTextL.size.cols = BIGTEXT_DEAD_COLS;
-				e->bigTextR.size.cols = BIGTEXT_DUDE_COLS;
-				break;
-			case DEAD_DUDE:
-				e->bigTextStage = TREE_DUDE;
-				strncpy(e->bigTextL.str, BIGTEXT_TREE_STR, BIGTEXT_TREE_SIZE);
-				e->bigTextL.size.cols = BIGTEXT_TREE_COLS;
-				break;
-		}
+		if (e->bigTextsTopStage >= MAX_BIGTEXT_TOP_STAGE)
+			e->bigTextsTopStage = 0;
+		else
+			e->bigTextsTopStage++;
+		setBigTextsTop(e);
 	}
 
 	/* Flash restart every 0.75s */
