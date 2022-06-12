@@ -1,49 +1,72 @@
-.TH treedude 6 2022-05-24 treedude
+.TH treedude 6 2022-06-12 treedude
 
 .SH NAME
-treedude \- a clone of the mini-game from Superhot
+
+treedude - a clone of the mini-game from Superhot
 
 .SH SYNOPSIS
-.B treedude [\fB-nvV\fR]
+
+.B treedude
+.RB [ -nvV ]
 
 .SH DESCRIPTION
-\fBtreedude\fR is a clone of the mini-game from Superhot titled 'Tree Dude Tree Dude Dude'. Chop as much of the tree as you can while avoiding branches and keeping an eye on the timer.
+
+.B treedude
+is a clone of the mini-game from Superhot titled 'Tree Dude Tree Dude Dude'. Chop as much of the tree as you can while avoiding branches and keeping an eye on the timer.
 
 Written in ANSI C with the Curses library, complies with SUSv2.
 
 .SH CONTROLS
+
 .TP
 .B LeftArrow, A, H
 Chop left
+
 .TP
 .B RightArrow, D, L
 Chop right
+
 .TP
 .B Enter
 Continue
+
 .TP
 .B Q, Esc
 Quit
 
 .SH OPTIONS
+
 .TP
 .B n
-Do not read or write the high score from the \fB$XDG_DATA_HOME\fR directory.
+Do not read or write the high score from the
+.B $XDG_DATA_HOME
+directory.
+
 .TP
 .B v, V
-Print \fBtreedude\fR version and exit.
+Print
+.B treedude
+version and exit.
 
 .SH ENVIRONMENT
+
 .TP
 .B XDG_DATA_HOME
-The user's high score is placed within the directory defined. If \fB$XDG_DATA_HOME\fR is empty or not set, then \f(BI$HOME\fI/.local/share\fR is used in its place. This is in adherence to the \fIXDG Base Directory Specification\fR.
+The user's high score is placed within the directory defined. If
+.B $XDG_DATA_HOME
+is empty or not set, then
+.BI $HOME /.local/share
+is used in its place. This is in adherence to the
+.I XDG Base Directory Specification.
 
 .SH FILES
+
 .TP
-.B \f(BI$XDG_DATA_HOME\fI/treedude/score\fR
+.BI $XDG_DATA_HOME /treedude/score
 User's high score.
 
 .SH BUGS
+
 Bugs and issues can be reported on GitHub or GitLab.
 
 <https://github.com/n-ivkovic/treedude/issues>
@@ -51,9 +74,11 @@ Bugs and issues can be reported on GitHub or GitLab.
 <https://gitlab.com/n-ivkovic/treedude/issues>
 
 .SH AUTHORS
+
 Nicholas Ivkovic <https://nivkovic.net>.
 
 .SH COPYRIGHT
+
 Copyright (c) 2022 Nicholas Ivkovic.
 
 Licensed under the GNU General Public License version 3 or later. See ./LICENSE, or <https://gnu.org/licenses/gpl.html> if more recent, for details.
