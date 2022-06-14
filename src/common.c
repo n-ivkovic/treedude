@@ -21,10 +21,10 @@
 
 void initRandSeed(void)
 {
-	struct timeval sysTime;
+	struct timespec sysTime;
 
-	gettimeofday(&sysTime, NULL);
-	srand(sysTime.tv_usec / 1000);
+	clock_gettime(CLOCK_MONOTONIC, &sysTime);
+	srand(sysTime.tv_nsec / 1000000);
 }
 
 int randInt(int min, int max)
