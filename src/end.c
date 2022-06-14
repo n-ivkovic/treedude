@@ -1,7 +1,7 @@
 #include "end.h"
 
 #define BIGTEXT_TOP_Y 3
-#define BIGTEXT_SCORE_Y BIGTEXT_TOP_Y + 1 + BIGTEXT_ROWS
+#define BIGTEXT_SCORE_Y (BIGTEXT_TOP_Y + 1 + BIGTEXT_ROWS)
 #define BIGTEXT_SCORE_PADDING 4
 #define MAX_BIGTEXT_TOP_STAGE 2
 
@@ -15,41 +15,41 @@
 #define TEXT_RESTART_LEN strlen(TEXT_RESTART_STR)
 
 #define BIGTEXT_DEAD_STR "```  ````  ``  ``` `  ` `    `  ` `  ``  ` ```  ```` `  ``  ` `    `  ` `  ````  ```` `  ` ``` "
-#define BIGTEXT_DEAD_COLS strlen(BIGTEXT_DEAD_STR) / BIGTEXT_ROWS
-#define BIGTEXT_DEAD_SIZE BIGTEXT_ROWS * BIGTEXT_DEAD_COLS + 1
+#define BIGTEXT_DEAD_COLS (strlen(BIGTEXT_DEAD_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_DEAD_SIZE (BIGTEXT_ROWS * BIGTEXT_DEAD_COLS + 1)
 #define BIGTEXT_SCORE_STR " ```   ```  ```  ````  `````     `    `   ` `   ` `    ```  `    `   ` ````  ```     ` `    `   ` ` `   `   ````   ```  ```  `  `` ````"
-#define BIGTEXT_SCORE_COLS strlen(BIGTEXT_SCORE_STR) / BIGTEXT_ROWS
-#define BIGTEXT_SCORE_SIZE BIGTEXT_ROWS * BIGTEXT_SCORE_COLS + 1
+#define BIGTEXT_SCORE_COLS (strlen(BIGTEXT_SCORE_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_SCORE_SIZE (BIGTEXT_ROWS * BIGTEXT_SCORE_COLS + 1)
 #define BIGTEXT_0_STR " ``` `  ``` ` ```  ` ``` "
-#define BIGTEXT_0_COLS strlen(BIGTEXT_0_STR) / BIGTEXT_ROWS
-#define BIGTEXT_0_SIZE BIGTEXT_ROWS * BIGTEXT_0_COLS + 1
+#define BIGTEXT_0_COLS (strlen(BIGTEXT_0_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_0_SIZE (BIGTEXT_ROWS * BIGTEXT_0_COLS + 1)
 #define BIGTEXT_1_STR " `` ```  ``  `` ````"
-#define BIGTEXT_1_COLS strlen(BIGTEXT_1_STR) / BIGTEXT_ROWS
-#define BIGTEXT_1_SIZE BIGTEXT_ROWS * BIGTEXT_1_COLS + 1
+#define BIGTEXT_1_COLS (strlen(BIGTEXT_1_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_1_SIZE (BIGTEXT_ROWS * BIGTEXT_1_COLS + 1)
 #define BIGTEXT_2_STR " `` `  `  `  `  ````"
-#define BIGTEXT_2_COLS strlen(BIGTEXT_2_STR) / BIGTEXT_ROWS
-#define BIGTEXT_2_SIZE BIGTEXT_ROWS * BIGTEXT_2_COLS + 1
+#define BIGTEXT_2_COLS (strlen(BIGTEXT_2_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_2_SIZE (BIGTEXT_ROWS * BIGTEXT_2_COLS + 1)
 #define BIGTEXT_3_STR "```    ` ``    ```` "
-#define BIGTEXT_3_COLS strlen(BIGTEXT_3_STR) / BIGTEXT_ROWS
-#define BIGTEXT_3_SIZE BIGTEXT_ROWS * BIGTEXT_3_COLS + 1
+#define BIGTEXT_3_COLS (strlen(BIGTEXT_3_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_3_SIZE (BIGTEXT_ROWS * BIGTEXT_3_COLS + 1)
 #define BIGTEXT_4_STR "`  ``  `````   `   `"
-#define BIGTEXT_4_COLS strlen(BIGTEXT_4_STR) / BIGTEXT_ROWS
-#define BIGTEXT_4_SIZE BIGTEXT_ROWS * BIGTEXT_4_COLS + 1
+#define BIGTEXT_4_COLS (strlen(BIGTEXT_4_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_4_SIZE (BIGTEXT_ROWS * BIGTEXT_4_COLS + 1)
 #define BIGTEXT_5_STR "`````   ```    ```` "
-#define BIGTEXT_5_COLS strlen(BIGTEXT_5_STR) / BIGTEXT_ROWS
-#define BIGTEXT_5_SIZE BIGTEXT_ROWS * BIGTEXT_5_COLS + 1
+#define BIGTEXT_5_COLS (strlen(BIGTEXT_5_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_5_SIZE (BIGTEXT_ROWS * BIGTEXT_5_COLS + 1)
 #define BIGTEXT_6_STR "  `   `   ```` `   ` ``` "
-#define BIGTEXT_6_COLS strlen(BIGTEXT_6_STR) / BIGTEXT_ROWS
-#define BIGTEXT_6_SIZE BIGTEXT_ROWS * BIGTEXT_6_COLS + 1
+#define BIGTEXT_6_COLS (strlen(BIGTEXT_6_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_6_SIZE (BIGTEXT_ROWS * BIGTEXT_6_COLS + 1)
 #define BIGTEXT_7_STR "`````   `   `    `    `  "
-#define BIGTEXT_7_COLS strlen(BIGTEXT_7_STR) / BIGTEXT_ROWS
-#define BIGTEXT_7_SIZE BIGTEXT_ROWS * BIGTEXT_7_COLS + 1
+#define BIGTEXT_7_COLS (strlen(BIGTEXT_7_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_7_SIZE (BIGTEXT_ROWS * BIGTEXT_7_COLS + 1)
 #define BIGTEXT_8_STR " ``` `   ` ``` `   ` ``` "
-#define BIGTEXT_8_COLS strlen(BIGTEXT_8_STR) / BIGTEXT_ROWS
-#define BIGTEXT_8_SIZE BIGTEXT_ROWS * BIGTEXT_8_COLS + 1
+#define BIGTEXT_8_COLS (strlen(BIGTEXT_8_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_8_SIZE (BIGTEXT_ROWS * BIGTEXT_8_COLS + 1)
 #define BIGTEXT_9_STR " `````   ` ````   `   `  "
-#define BIGTEXT_9_COLS strlen(BIGTEXT_9_STR) / BIGTEXT_ROWS
-#define BIGTEXT_9_SIZE BIGTEXT_ROWS * BIGTEXT_9_COLS + 1
+#define BIGTEXT_9_COLS (strlen(BIGTEXT_9_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_9_SIZE (BIGTEXT_ROWS * BIGTEXT_9_COLS + 1)
 
 static void setBigTextsTop(end_t *e)
 {

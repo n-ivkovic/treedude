@@ -31,26 +31,26 @@
 #define TEXT_CHOP_L_LEN strlen(TEXT_CHOP_L_STR)
 #define TEXT_CHOP_R_STR "<--CHOP-RIGHT"
 #define TEXT_CHOP_R_LEN strlen(TEXT_CHOP_R_STR)
-#define TEXT_CHOP_DIR_Y WIN_ROWS - DUDE_ROWS - 3
+#define TEXT_CHOP_DIR_Y (WIN_ROWS - DUDE_ROWS - 3)
 #define TEXT_CHOP_DIR_PADDING 1
 #define TEXT_WATCHTIME_STR "WATCH TIME!"
 #define TEXT_WATCHTIME_LEN strlen(TEXT_WATCHTIME_STR)
 
 #define BIGTEXT_FASTER_STR "````  ``   ``` `````` ```` ```` `    `  ` `      ``   `    `   ````  ````  ```   ``   ```  ```` `    `  `     `  ``   `    ` `  `    `  ` ````   ``   ```` `  ``"
-#define BIGTEXT_FASTER_COLS strlen(BIGTEXT_FASTER_STR) / BIGTEXT_ROWS
-#define BIGTEXT_FASTER_SIZE BIGTEXT_ROWS * BIGTEXT_FASTER_COLS + 1
+#define BIGTEXT_FASTER_COLS (strlen(BIGTEXT_FASTER_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_FASTER_SIZE (BIGTEXT_ROWS * BIGTEXT_FASTER_COLS + 1)
 #define BIGTEXT_LEVELUP_STR "`    ```` `     ` ```` `       `   ` ```` `    `    `     ` `    `       `   ` `   ``    ```   `   `  ```  `       `   ` ```` `    `      ` `   `    `       `   ` `    ```` ````    `    ```` ````     ```  `    "
-#define BIGTEXT_LEVELUP_COLS strlen(BIGTEXT_LEVELUP_STR) / BIGTEXT_ROWS
-#define BIGTEXT_LEVELUP_SIZE BIGTEXT_ROWS * BIGTEXT_LEVELUP_COLS + 1
+#define BIGTEXT_LEVELUP_COLS (strlen(BIGTEXT_LEVELUP_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_LEVELUP_SIZE (BIGTEXT_ROWS * BIGTEXT_LEVELUP_COLS + 1)
 #define BIGTEXT_SPEEDUP_STR " ```  ````  ```` ```` ```      `   ` ```` `     `   ` `    `    `  `     `   ` `   ` ```  ````  ```  ```  `  `     `   ` ````     ` `     `    `    `  `     `   ` `    ````  `     ```` ```` ```       ```  `    "
-#define BIGTEXT_SPEEDUP_COLS strlen(BIGTEXT_SPEEDUP_STR) / BIGTEXT_ROWS
-#define BIGTEXT_SPEEDUP_SIZE BIGTEXT_ROWS * BIGTEXT_SPEEDUP_COLS + 1
+#define BIGTEXT_SPEEDUP_COLS (strlen(BIGTEXT_SPEEDUP_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_SPEEDUP_SIZE (BIGTEXT_ROWS * BIGTEXT_SPEEDUP_COLS + 1)
 #define BIGTEXT_TICKTOCK_STR "`````` ```  ``` `  `    `````` ```   ``` `  `  ``    `  `    ` `       ``  `   ` `    ` `   ``    `  `    ``        ``  `   ` `    ``    ``    `  `    ` `       ``  `   ` `    ` `   ``   ```  ``` `  `      ``   ```   ``` `  `"
-#define BIGTEXT_TICKTOCK_COLS strlen(BIGTEXT_TICKTOCK_STR) / BIGTEXT_ROWS
-#define BIGTEXT_TICKTOCK_SIZE BIGTEXT_ROWS * BIGTEXT_TICKTOCK_COLS + 1
+#define BIGTEXT_TICKTOCK_COLS (strlen(BIGTEXT_TICKTOCK_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_TICKTOCK_SIZE (BIGTEXT_ROWS * BIGTEXT_TICKTOCK_COLS + 1)
 #define BIGTEXT_CHOPCHOP_STR " ``` `  `  ```  ````       ``` `  `  ```  ```` `    `  ` `   ` `   `     `    `  ` `   ` `   ``    ```` `   ` ````      `    ```` `   ` ```` `    `  ` `   ` `         `    `  ` `   ` `     ``` `  `  ```  `          ``` `  `  ```  `    "
-#define BIGTEXT_CHOPCHOP_COLS strlen(BIGTEXT_CHOPCHOP_STR) / BIGTEXT_ROWS
-#define BIGTEXT_CHOPCHOP_SIZE BIGTEXT_ROWS * BIGTEXT_CHOPCHOP_COLS + 1
+#define BIGTEXT_CHOPCHOP_COLS (strlen(BIGTEXT_CHOPCHOP_STR) / BIGTEXT_ROWS)
+#define BIGTEXT_CHOPCHOP_SIZE (BIGTEXT_ROWS * BIGTEXT_CHOPCHOP_COLS + 1)
 
 static void initTree(tree_t *tree)
 {

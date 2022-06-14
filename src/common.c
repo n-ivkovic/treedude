@@ -8,7 +8,7 @@
 #define FADE_RAND_CHANCE 15
 #define FADE_RAND_CHARS "`#-"
 #define FADE_RAND_CHARS_LEN strlen(FADE_RAND_CHARS)
-#define COLS_EXCEEDED x + cols - winSize.cols
+#define COLS_EXCEEDED (x + cols - winSize.cols)
 
 #define TEXT_SCREEN_VERSION_LEN strlen(VERSION)
 #define TEXT_SCREEN_TOP_1_STR "treedude v"
@@ -52,8 +52,8 @@ void initDisplay(void)
 	initscr();
 	cbreak();
 	noecho();
-	keypad(stdscr, TRUE_E);
-	nodelay(stdscr, TRUE_E);
+	keypad(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
 	curs_set(0);
 }
 

@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <curses.h>
 
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 
 /* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if 20 is too 'jittery' */
 #define LOOPS_PER_SEC 20
@@ -20,14 +20,16 @@
 #define FADE_SPEED (LOOPS_PER_SEC / 2)
 
 #define NEW_LINE "\n"
+#ifndef PATH_MAX
 #define PATH_MAX 0x1000
+#endif
 #define LOOPS_MAX 0x7FFFFFFF /* Max loop_t value */
 #define TEXT_SCORE_COLS_MAX 10 /* Length of max score_t value as a string */
 #define WIN_COLS 64
 #define WIN_ROWS 24
 #define SHOWN_MIN 0
 #define SHOWN_MAX 100
-#define SPRITE_STR_MAX (WIN_COLS * WIN_ROWS) / 4 /* Sprites are not larger than 1/4 of the main window */
+#define SPRITE_STR_MAX ((WIN_COLS * WIN_ROWS) / 4) /* Sprites are not larger than 1/4 of the main window */
 
 #define FLAG_MAIN_NONE            0x00
 #define FLAG_MAIN_NOHIGHSCOREFILE 0x01
@@ -40,7 +42,7 @@
 
 #define DUDE_ROWS 6
 #define DUDE_COLS 15
-#define DUDE_SIZE DUDE_ROWS * DUDE_COLS + 1
+#define DUDE_SIZE (DUDE_ROWS * DUDE_COLS + 1)
 #define DUDE_STILL_L_STR "      ###      [   ]#####       |  |- -|_      |/  \\_/  \\     ||_______|      |___|___|   "
 #define DUDE_STILL_R_STR "      ###           #####[   ]     |- -|_ |     /  \\_/  \\|     |_______||     |___|___|   "
 #define DUDE_CHOP_L_STR "    ###           #####          |o o|_       /  \\_/  \\      |___   ----=== |___|___|     "
@@ -50,10 +52,10 @@
 #define BIGTEXT_ROWS 5
 #define BIGTEXT_TREE_STR "````` ````  ```` ````  `   `   ` `    `     `   ````  ```  ```   `   ` `   `    `     `   `  `` ```` ````"
 #define BIGTEXT_TREE_COLS strlen(BIGTEXT_TREE_STR) / BIGTEXT_ROWS
-#define BIGTEXT_TREE_SIZE BIGTEXT_ROWS * BIGTEXT_TREE_COLS + 1
+#define BIGTEXT_TREE_SIZE (BIGTEXT_ROWS * BIGTEXT_TREE_COLS + 1)
 #define BIGTEXT_DUDE_STR "```  `   ` ```  `````  ` `   ` `  ` `   `  ` `   ` `  ` ``` `  ` `   ` `  ` `   ```   ```  ```  ````"
 #define BIGTEXT_DUDE_COLS strlen(BIGTEXT_DUDE_STR) / BIGTEXT_ROWS
-#define BIGTEXT_DUDE_SIZE BIGTEXT_ROWS * BIGTEXT_DUDE_COLS + 1
+#define BIGTEXT_DUDE_SIZE (BIGTEXT_ROWS * BIGTEXT_DUDE_COLS + 1)
 
 /**
  * Get the reverse value
