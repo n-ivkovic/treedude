@@ -72,7 +72,7 @@
  *
  * @param str  String to empty
  */
-#define NULL_STRING(str) (strncpy(str, "\0", 1))
+#define NULL_STRING(str) (str[0] = '\0')
 
 /**
  * Get center Y-pos of an object
