@@ -9,9 +9,6 @@
 #include <math.h>
 #include <sys/stat.h>
 #include <time.h>
-#ifndef CLOCK_MONOTONIC
-#include <sys/time.h>
-#endif
 #include <unistd.h>
 #include <curses.h>
 

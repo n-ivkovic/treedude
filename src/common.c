@@ -26,23 +26,19 @@ typedef struct sysTime {
 
 static sysTime_t getSysTime(void)
 {
-	sysTime_t result;
+	sysTime_t time;
+	struct timespec clockTime;
 
 #ifdef CLOCK_MONOTONIC
-	struct timespec sysTime;
-
-	clock_gettime(CLOCK_MONOTONIC, &sysTime);
-	result.s = sysTime.tv_sec;
-	result.ms = sysTime.tv_nsec / 1000000;
+	clock_gettime(CLOCK_MONOTONIC, &clockTime);
 #else
-	struct timeval sysTime;
-
-	gettimeofday(&sysTime, NULL);
-	result.s = sysTime.tv_sec;
-	result.ms = sysTime.tv_usec / 1000;
+	clock_gettime(CLOCK_REALTIME, &clockTime);
 #endif
 
-	return result;
+	time.s = clockTime.tv_sec;
+	time.ms = clockTime.tv_nsec / 1000000;
+
+	return time;
 }
 
 long getEpochMs(void)
