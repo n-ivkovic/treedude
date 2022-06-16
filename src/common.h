@@ -9,10 +9,13 @@
 #include <math.h>
 #include <sys/stat.h>
 #include <time.h>
+#ifndef CLOCK_MONOTONIC
+#include <sys/time.h>
+#endif
 #include <unistd.h>
 #include <curses.h>
 
-#define VERSION "1.0.2"
+#define VERSION "1.0.3"
 
 /* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if 20 is too 'jittery' */
 #define LOOPS_PER_SEC 20
@@ -180,6 +183,13 @@ int randInt(int min, int max);
  * @returns    Rounded value
  */
 int roundToInt(float val);
+
+/**
+ * Get currnent Unix epoch timestamp in ms
+ *
+ * @returns Current timestamp
+ */
+long getEpochMs(void);
 
 /**
  * Initialise display

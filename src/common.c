@@ -37,6 +37,25 @@ int roundToInt(float val)
 	return (val >= floor(val) + 0.5f) ? (int)ceil(val) : (int)floor(val);
 }
 
+long getEpochMs(void)
+{
+	long result;
+
+#ifdef CLOCK_MONOTONIC
+	struct timespec sysTime;
+
+	clock_gettime(CLOCK_MONOTONIC, &sysTime);
+	result = sysTime.tv_sec * 1000 + sysTime.tv_nsec / 1000000;
+#else
+	struct timeval sysTime;
+
+	gettimeofday(&sysTime, NULL);
+	result = sysTime.tv_sec * 1000 + sysTime.tv_usec / 1000;
+#endif
+
+	return result;
+}
+
 static attr_t attrFromFlags(flag_t flags)
 {
 	if (flags & FLAG_DRAW_DIM)
