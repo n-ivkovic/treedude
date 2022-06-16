@@ -21,7 +21,7 @@ static void cleanExit(int signal)
 int main(int argc, char *argv[])
 {
 	char argOpt;
-	struct timeval sysTime;
+	struct timespec sysTime;
 	long epochStartMs = 0, epochEndMs = 0, timerMs = 0;
 	flag_t flags = FLAG_MAIN_NONE;
 	input_t input;
@@ -67,8 +67,8 @@ int main(int argc, char *argv[])
 
 	while (stage != QUIT) { 
 		/* Start loop timer */
-		gettimeofday(&sysTime, NULL);
-		epochStartMs = sysTime.tv_sec * 1000 + sysTime.tv_usec / 1000;
+		clock_gettime(CLOCK_MONOTONIC, &sysTime);
+		epochStartMs = sysTime.tv_sec * 1000 + sysTime.tv_nsec / 1000000;
 
 		input = getch();
 
@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
 		updateScreen(&screen);
 
 		/* End loop timer and sleep */
-		gettimeofday(&sysTime, NULL);
-		epochEndMs = sysTime.tv_sec * 1000 + sysTime.tv_usec / 1000;
+		clock_gettime(CLOCK_MONOTONIC, &sysTime);
+		epochEndMs = sysTime.tv_sec * 1000 + sysTime.tv_nsec / 1000000;
 		timerMs = epochEndMs - epochStartMs;
 		if (timerMs < MS_PER_LOOP)
 			usleep(1000 * (MS_PER_LOOP - timerMs));
