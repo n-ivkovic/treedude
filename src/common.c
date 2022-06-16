@@ -19,39 +19,30 @@
 #define TEXT_SCREEN_BOTTOM_LEN strlen(TEXT_SCREEN_BOTTOM_STR)
 #define TEXT_SCREEN_X_OFFSET 3
 
-typedef struct sysTime {
-	time_t s;
-	long ms;
-} sysTime_t;
-
-static sysTime_t getSysTime(void)
+static struct timespec getSysTime(void)
 {
-	sysTime_t time;
-	struct timespec clockTime;
+	struct timespec sysTime;
 
 #ifdef CLOCK_MONOTONIC
-	clock_gettime(CLOCK_MONOTONIC, &clockTime);
+	clock_gettime(CLOCK_MONOTONIC, &sysTime);
 #else
-	clock_gettime(CLOCK_REALTIME, &clockTime);
+	clock_gettime(CLOCK_REALTIME, &sysTime);
 #endif
 
-	time.s = clockTime.tv_sec;
-	time.ms = clockTime.tv_nsec / 1000000;
-
-	return time;
+	return sysTime;
 }
 
 long getEpochMs(void)
 {
-	sysTime_t time;
+	struct timespec time;
 
 	time = getSysTime();
-	return time.s * 1000 + time.ms;
+	return time.tv_sec * 1000 + time.tv_nsec / 1000000;
 }
 
 void initRandSeed(void)
 {
-	srand(getSysTime().ms);
+	srand(getSysTime().tv_nsec / 1000000);
 }
 
 int randInt(int min, int max)
