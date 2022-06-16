@@ -19,12 +19,43 @@
 #define TEXT_SCREEN_BOTTOM_LEN strlen(TEXT_SCREEN_BOTTOM_STR)
 #define TEXT_SCREEN_X_OFFSET 3
 
-void initRandSeed(void)
+typedef struct sysTime {
+	time_t s;
+	long ms;
+} sysTime_t;
+
+static sysTime_t getSysTime(void)
 {
+	sysTime_t result;
+
+#ifdef CLOCK_MONOTONIC
 	struct timespec sysTime;
 
 	clock_gettime(CLOCK_MONOTONIC, &sysTime);
-	srand(sysTime.tv_nsec / 1000000);
+	result.s = sysTime.tv_sec;
+	result.ms = sysTime.tv_nsec / 1000000;
+#else
+	struct timeval sysTime;
+
+	gettimeofday(&sysTime, NULL);
+	result.s = sysTime.tv_sec;
+	result.ms = sysTime.tv_usec / 1000;
+#endif
+
+	return result;
+}
+
+long getEpochMs(void)
+{
+	sysTime_t time;
+
+	time = getSysTime();
+	return time.s * 1000 + time.ms;
+}
+
+void initRandSeed(void)
+{
+	srand(getSysTime().ms);
 }
 
 int randInt(int min, int max)
@@ -35,25 +66,6 @@ int randInt(int min, int max)
 int roundToInt(float val)
 {
 	return (val >= floor(val) + 0.5f) ? (int)ceil(val) : (int)floor(val);
-}
-
-long getEpochMs(void)
-{
-	long result;
-
-#ifdef CLOCK_MONOTONIC
-	struct timespec sysTime;
-
-	clock_gettime(CLOCK_MONOTONIC, &sysTime);
-	result = sysTime.tv_sec * 1000 + sysTime.tv_nsec / 1000000;
-#else
-	struct timeval sysTime;
-
-	gettimeofday(&sysTime, NULL);
-	result = sysTime.tv_sec * 1000 + sysTime.tv_usec / 1000;
-#endif
-
-	return result;
 }
 
 static attr_t attrFromFlags(flag_t flags)

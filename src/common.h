@@ -163,6 +163,13 @@ typedef enum {
 } fade_t;
 
 /**
+ * Get currnent Unix epoch timestamp in ms
+ *
+ * @returns Current timestamp
+ */
+long getEpochMs(void);
+
+/**
  * Initialise random seed
  */
 void initRandSeed(void);
@@ -183,13 +190,6 @@ int randInt(int min, int max);
  * @returns    Rounded value
  */
 int roundToInt(float val);
-
-/**
- * Get currnent Unix epoch timestamp in ms
- *
- * @returns Current timestamp
- */
-long getEpochMs(void);
 
 /**
  * Initialise display
