@@ -1,5 +1,11 @@
 #include "common.h"
 
+#ifdef CLOCK_MONOTONIC
+#define SYSCLOCK CLOCK_MONOTONIC
+#else
+#define SYSCLOCK CLOCK_REALTIME
+#endif
+
 #define HIGH_SCORE_PATH_DIR "/treedude"
 #define HIGH_SCORE_PATH_FILE "/score"
 #define HIGH_SCORE_PATH "/treedude/score"
@@ -24,12 +30,7 @@ static struct timespec getSysTime(void)
 {
 	struct timespec sysTime;
 
-#ifdef CLOCK_MONOTONIC
-	clock_gettime(CLOCK_MONOTONIC, &sysTime);
-#else
-	clock_gettime(CLOCK_REALTIME, &sysTime);
-#endif
-
+	clock_gettime(SYSCLOCK, &sysTime);
 	return sysTime;
 }
 
@@ -39,6 +40,16 @@ long getEpochMs(void)
 
 	time = getSysTime();
 	return time.tv_sec * 1000 + time.tv_nsec / 1000000;
+}
+
+void sleepMs(long ms)
+{
+	struct timespec time;
+
+	time.tv_sec = ms / 1000;
+	time.tv_nsec = (ms % 1000) * 1000000;
+
+	nanosleep(time);
 }
 
 void initRandSeed(void)

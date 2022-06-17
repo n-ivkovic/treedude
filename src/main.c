@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 		/* End loop timer and sleep */
 		timerMs = getEpochMs() - startEpochMs;
 		if (timerMs < MS_PER_LOOP)
-			usleep(1000 * (MS_PER_LOOP - timerMs));
+			sleepMs(MS_PER_LOOP - timerMs);
 	}
 
 	cleanExit(EXIT_SUCCESS);

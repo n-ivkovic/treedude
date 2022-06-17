@@ -167,6 +167,13 @@ typedef enum {
 long getEpochMs(void);
 
 /**
+ * Sleep for a given length of time in ms
+ *
+ * @param ms  Time to sleep
+ */
+void sleepMs(long ms);
+
+/**
  * Initialise random seed
  */
 void initRandSeed(void);
