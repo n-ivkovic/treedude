@@ -1,4 +1,4 @@
-#define _XOPEN_SOURCE 500 /* C89 + POSIX.1-1990 + POSIX.2-1992 + SUSv2 */
+#define _XOPEN_SOURCE 500 /* SUSv2 (inc. C89/90, POSIX.1-1990, POSIX.2-1992, POSIX.1b-1993, POSIX.1c-1995) */
 
 #include "intro.h"
 #include "game.h"

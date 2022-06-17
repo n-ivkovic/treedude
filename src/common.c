@@ -4,6 +4,7 @@
 #define HIGH_SCORE_PATH_FILE "/score"
 #define HIGH_SCORE_PATH "/treedude/score"
 #define HIGH_SCORE_PATH_DIR_PERMISSIONS S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
+#define HIGH_SCORE_FILE_FORMAT "%lx"
 
 #define FADE_RAND_CHANCE 15
 #define FADE_RAND_CHARS "`#-"
@@ -219,7 +220,7 @@ static bool_t dirExists(const char *path)
 	if (stat(path, &stats) != 0)
 		return FALSE_E;
 
-	if (!S_ISDIR(stats.st_mode))
+	if (S_ISDIR(stats.st_mode) == 0)
 		return FALSE_E;
 
 	return TRUE_E;
@@ -261,8 +262,8 @@ score_t loadHighScore(void)
 
 	/* Read file */
 	fileStream = fopen(path, "r");
-	if (fileStream != NULL) {
-		fscanf(fileStream, "%lx", &highScore);
+	if (fileStream) {
+		fscanf(fileStream, HIGH_SCORE_FILE_FORMAT, &highScore);
 		fclose(fileStream);
 	}
 
@@ -285,8 +286,8 @@ void saveHighScore(score_t highScore)
 	/* Write high score to file */
 	strcat(path, HIGH_SCORE_PATH_FILE);
 	fileStream = fopen(path, "w");
-	if (fileStream != NULL) {
-		fprintf(fileStream, "%lx", highScore);
+	if (fileStream) {
+		fprintf(fileStream, HIGH_SCORE_FILE_FORMAT, highScore);
 		fclose(fileStream);
 	}
 }
