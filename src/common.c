@@ -54,7 +54,13 @@ void sleepMs(long ms)
 
 void initRandSeed(void)
 {
-	srand(getSysTime().tv_nsec / 1000000);
+	long seed = getSysTime().tv_nsec;
+
+	/* Shrink the seed if the sys clock doesn't have nanosec or microsec accuracy so the lower digits aren't all 0s */
+	while (seed % 1000 == 0 && seed > 0)
+		seed /= 1000;
+
+	srand(seed);
 }
 
 int randInt(int min, int max)
