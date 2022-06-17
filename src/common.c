@@ -49,7 +49,7 @@ void sleepMs(long ms)
 	time.tv_sec = ms / 1000;
 	time.tv_nsec = (ms % 1000) * 1000000;
 
-	nanosleep(time);
+	nanosleep(&time, NULL);
 }
 
 void initRandSeed(void)
