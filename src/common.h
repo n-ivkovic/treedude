@@ -160,7 +160,7 @@ typedef enum {
 } fade_t;
 
 /**
- * Get currnent Unix epoch timestamp in ms
+ * Get current Unix epoch timestamp in ms
  *
  * @returns Current timestamp
  */
@@ -300,7 +300,7 @@ void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, con
  *
  * @param fade   Fade state to update
  * @param shown  Percentage (0-100) of object to show during fade
- * @param multi  Multiplyer of fade speed
+ * @param multi  Multiplier of fade speed
  * @returns      Whether fade has been updated 
  */
 bool_t updateFadeMulti(fade_t *fade, shown_t *shown, const float multi);

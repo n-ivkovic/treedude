@@ -318,6 +318,7 @@ void updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen
 	/* Successful chop */
 	if (g->state == CHOP) {
 		g->state = CHOPPED;
+
 		/* Increment timer */
 		if (g->timer < TIMER_MAX) {
 			g->timer++;
@@ -325,9 +326,11 @@ void updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen
 			if (g->timer > TIMER_WARN)
 				g->showWatchTime = FALSE_E;
 		}
+
 		/* Level up */
 		if (*score == g->levelUpScore)
 			levelUp(g, *score);
+
 		/* Increment score */
 		(*score)++;
 		updateScore(*score, screen, &g->winScore);
@@ -340,6 +343,7 @@ void updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen
 			chunk->pos.y += TREE_CHUNK_ROWS / TREE_FALL_SPEED;
 			chunk = chunk->next;
 		}
+
 		/* Finish chop */
 		if (g->tree.base->pos.y >= TREE_BASE_ROW && g->state != DEAD)
 			g->state = STILL;
@@ -354,7 +358,7 @@ void updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen
 	}
 
 	/* Remove hidden chopped tree chunks */
-	if (g->chopped.base && g->chopped.base->shown <= SHOWN_MIN)
+	while (g->chopped.base && g->chopped.base->shown <= SHOWN_MIN)
 		free(popTree(&g->chopped));
 
 	/* Decrement timer */
@@ -488,7 +492,7 @@ void drawGame(const window_t win, const game_t g, const stage_t stage)
 	drawTree(win, g.chopped, g.shown, flags);
 	drawDude(win, g.dudeSide, g.state, g.shown, (stage == GAME) ? FLAG_DRAW_BOLD : flags);
 
-	/* Do not draw additional items if player is dead or currently not playing */
+	/* Do not draw additional items if player is dead */
 	if (stage != GAME || g.state == DEAD)
 		return;
 

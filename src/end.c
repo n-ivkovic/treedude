@@ -83,7 +83,6 @@ void initEnd(end_t *e)
 	e->loops = 0;
 	e->fade = IN;
 	e->shown = SHOWN_MIN;
-	e->bigTextsTopStage = 0;
 
 	/* Top big texts */
 	e->bigTextL.size.rows = BIGTEXT_ROWS;
@@ -92,6 +91,7 @@ void initEnd(end_t *e)
 	e->bigTextR.pos.y = BIGTEXT_TOP_Y;
 	e->bigTextL.pos.x = WIN_COLS / 2 - BIGTEXT_TREE_COLS;
 	e->bigTextR.pos.x = WIN_COLS / 2 + 3;
+	e->bigTextsTopStage = 0;
 	setBigTextsTop(e);
 
 	/* Big text score */

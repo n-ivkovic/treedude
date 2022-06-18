@@ -26,19 +26,11 @@
 #define TEXT_SCREEN_BOTTOM_LEN strlen(TEXT_SCREEN_BOTTOM_STR)
 #define TEXT_SCREEN_X_OFFSET 3
 
-static struct timespec getSysTime(void)
-{
-	struct timespec sysTime;
-
-	clock_gettime(SYSCLOCK, &sysTime);
-	return sysTime;
-}
-
 long getEpochMs(void)
 {
 	struct timespec time;
 
-	time = getSysTime();
+	clock_gettime(SYSCLOCK, &time);
 	return time.tv_sec * 1000 + time.tv_nsec / 1000000;
 }
 
@@ -48,16 +40,17 @@ void sleepMs(long ms)
 
 	time.tv_sec = ms / 1000;
 	time.tv_nsec = (ms % 1000) * 1000000;
-
 	nanosleep(&time, NULL);
 }
 
 void initRandSeed(void)
 {
+	struct timespec time;
 	struct timespec timeRes;
 
+	clock_gettime(SYSCLOCK, &time);
 	clock_getres(SYSCLOCK, &timeRes);
-	srand(getSysTime().tv_nsec / timeRes.tv_nsec);
+	srand(time.tv_nsec / timeRes.tv_nsec);
 }
 
 int randInt(int min, int max)
@@ -98,7 +91,7 @@ void freeDisplay(void)
 void initWindow(window_t *win, const window_t *parWin, const coord_t y, const coord_t x, const dimention_t rows, const dimention_t cols)
 {
 	window_t newWin;
-	newWin.win = (parWin == NULL) ? newwin(rows, cols, y, x) : derwin(parWin->win, rows, cols, y, x);
+	newWin.win = (parWin) ? derwin(parWin->win, rows, cols, y, x) : newwin(rows, cols, y, x);
 	newWin.size.rows = rows;
 	newWin.size.cols = cols;
 	newWin.pos.y = y;
