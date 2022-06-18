@@ -2,7 +2,7 @@
 
 treedude is a clone of [the mini-game from Superhot titled 'Tree Dude Tree Dude Dude'](https://superhot.fandom.com/wiki/Tree_Dude). Chop as much of the tree as you can while avoiding branches and keeping an eye on the timer.
 
-Written in ANSI C with the Curses library, complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/).
+Written in C89/90 with the Curses library, complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/).
 
 ![treedude demo gif](.img/treedude.gif)
 
@@ -73,9 +73,9 @@ The below are features I may or may not get around to implementing:
 Please adhere to the following when creating a pull request:
 
 * Ensure changes do not return any warnings during compile time.
-* Ensure changes are written in ANSI C that complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/).
-* Ensure changes match the coding style of the project. No specific style is adhered to, but I suppose the [Linux kernel coding style](https://www.kernel.org/doc/html/v4.10/process/coding-style.html) is a good one.
-* Ensure the [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/) branching model is (somewhat) adhered to. Ensure changes are branched from `develop` and the pull request merges back into `develop`. Note that before the PR is accepted the target branch may be changed to a new branch named either `feature/[branch-name]` or `fix/[branch-name]`.
+* Ensure changes are written in C89/90 that complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/) but does not include any features removed from or marked as obsolete in [POSIX.1-2008 (SUSv4)](https://pubs.opengroup.org/onlinepubs/9699919799/).
+* Ensure changes match the general coding style of the project.
+* Ensure changes are branched from `develop` and the pull request merges back into `develop`.
 
 ## Licence
 
