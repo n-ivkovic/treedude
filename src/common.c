@@ -106,7 +106,7 @@ void updateWindow(const window_t win, const flag_t flags)
 	wattron(win.win, attr);
 	box(win.win, 0, 0);
 	wattroff(win.win, attr);
-	wrefresh(win.win);
+	wnoutrefresh(win.win);
 }
 
 void clearWindow(const window_t win)
@@ -185,7 +185,8 @@ void updateScreen(screen_t *screen)
 	drawObject(stdscr, screen->size, VERSION, 1, TEXT_SCREEN_VERSION_LEN, screen->win.pos.y, screen->win.pos.x + TEXT_SCREEN_X_OFFSET + TEXT_SCREEN_TOP_1_LEN, SHOWN_MAX, FLAG_DRAW_BOLD);
 	drawObject(stdscr, screen->size, TEXT_SCREEN_TOP_2_STR, 1, TEXT_SCREEN_TOP_2_LEN, screen->win.pos.y, screen->win.pos.x + TEXT_SCREEN_X_OFFSET + TEXT_SCREEN_TOP_1_LEN + TEXT_SCREEN_VERSION_LEN, SHOWN_MAX, FLAG_DRAW_BOLD);
 	drawObject(stdscr, screen->size, TEXT_SCREEN_BOTTOM_STR, 1, TEXT_SCREEN_BOTTOM_LEN, screen->win.pos.y + WIN_ROWS - 1, screen->win.pos.x + WIN_COLS - TEXT_SCREEN_BOTTOM_LEN - TEXT_SCREEN_X_OFFSET, SHOWN_MAX, FLAG_DRAW_NONE);
-	refresh();
+	wnoutrefresh(stdscr);
+	doupdate();
 }
 
 void freeScreen(screen_t *screen)
