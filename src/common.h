@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <curses.h>
 
-#define VERSION "1.0.4"
+#define VERSION "1.0.5"
 
 /* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if 20 is too 'jittery' */
 #define LOOPS_PER_SEC 20

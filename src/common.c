@@ -136,7 +136,7 @@ static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str,
 	/* Draw each row within window */
 	for (strRow = 0; strRow < rows && y + strRow <= winSize.rows; strRow++) {
 		/* Draw whole row */
-		if (flags & FLAG_DRAW_NONE && shown >= SHOWN_MAX) {
+		if (shown >= SHOWN_MAX && !(flags & FLAG_DRAW_SKIP_SPACES) && !(flags & FLAG_DRAW_ACS)) {
 			mvwaddnstr(win, y + strRow, x, &str[cols * strRow], cols - ((COLS_EXCEEDED > 0) ? COLS_EXCEEDED : 0));
 		/* Draw each char of row */
 		} else {
