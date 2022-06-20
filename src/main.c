@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 {
 	char argOpt;
 	long startEpochMs = 0, timerMs = 0;
-	flag_t flags = FLAG_MAIN_NONE;
+	flag_t mainFlags = FLAG_MAIN_NONE;
 	input_t input;
 	stage_t stage = INTRO;
 	bool_t draw = TRUE_E;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 				cleanExit(EXIT_SUCCESS);
 				break;
 			case 'n':
-				flags += FLAG_MAIN_NOHIGHSCOREFILE;
+				mainFlags |= FLAG_MAIN_NOHIGHSCOREFILE;
 				break;
 			case '?':
 			default:
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 	initGame(&game, screen);
 	initEnd(&end);
 
-	if (!(flags & FLAG_MAIN_NOHIGHSCOREFILE))
+	if (!(mainFlags & FLAG_MAIN_NOHIGHSCOREFILE))
 		highScore = loadHighScore();
 
 	while (stage != QUIT) { 
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
 		/* Term resize */
 		screenResized = FALSE_E;
-		if (LINES != (int)screen.size.rows || COLS != (int)screen.size.cols) {
+		if (LINES != screen.size.rows || COLS != screen.size.cols) {
 			screenResized = TRUE_E;
 			freeScreen(&screen);
 			initScreen(&screen, LINES, COLS);
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 				}
 				break;
 			case END:
-				draw = updateEnd(&end, &stage, &game.shown, &highScore, score, input, flags);
+				draw = updateEnd(&end, &stage, &game.shown, &highScore, score, input, mainFlags);
 				if (draw || screenResized) {
 					clearWindow(screen.win);
 					drawGame(screen.win, game, stage);

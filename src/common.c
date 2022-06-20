@@ -63,11 +63,11 @@ int roundToInt(float val)
 	return (val >= floor(val) + 0.5f) ? (int)ceil(val) : (int)floor(val);
 }
 
-static attr_t attrFromFlags(flag_t flags)
+static attr_t attrFromDrawFlags(flag_t drawFlags)
 {
-	if (flags & FLAG_DRAW_DIM)
+	if (drawFlags & FLAG_DRAW_DIM)
 		return A_DIM;
-	else if (flags & FLAG_DRAW_BOLD)
+	else if (drawFlags & FLAG_DRAW_BOLD)
 		return A_BOLD;
 	else
 		return A_NORMAL;
@@ -99,9 +99,9 @@ void initWindow(window_t *win, const window_t *parWin, const coord_t y, const co
 	*win = newWin;
 }
 
-void updateWindow(const window_t win, const flag_t flags)
+void updateWindow(const window_t win, const flag_t drawFlags)
 {
-	attr_t attr = attrFromFlags(flags);
+	attr_t attr = attrFromDrawFlags(drawFlags);
 
 	wattron(win.win, attr);
 	box(win.win, 0, 0);
@@ -120,7 +120,7 @@ void freeWindow(window_t *win)
 	delwin(win->win);
 }
 
-static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str, const dimention_t rows, const dimention_t cols, const coord_t y, const coord_t x, const shown_t shown, const flag_t flags)
+static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str, const dimention_t rows, const dimention_t cols, const coord_t y, const coord_t x, const shown_t shown, const flag_t drawFlags)
 {
 	char strChar;
 	dimention_t strRow, strCol;
@@ -130,25 +130,25 @@ static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str,
 	if (shown <= SHOWN_MIN || cols == 0 || y + (coord_t)rows < 0 || x + (coord_t)cols < 0 || x > (coord_t)winSize.cols)
 		return;
 
-	attr = attrFromFlags(flags);
+	attr = attrFromDrawFlags(drawFlags);
 	wattron(win, attr);
 
 	/* Draw each row within window */
 	for (strRow = 0; strRow < rows && y + strRow <= winSize.rows; strRow++) {
 		/* Draw whole row */
-		if (shown >= SHOWN_MAX && !(flags & FLAG_DRAW_SKIP_SPACES) && !(flags & FLAG_DRAW_ACS)) {
+		if (shown >= SHOWN_MAX && !(drawFlags & (FLAG_DRAW_SKIP_SPACES | FLAG_DRAW_ACS))) {
 			mvwaddnstr(win, y + strRow, x, &str[cols * strRow], cols - ((COLS_EXCEEDED > 0) ? COLS_EXCEEDED : 0));
 		/* Draw each char of row */
 		} else {
 			for (strCol = 0; strCol < cols && x + strCol <= winSize.cols; strCol++) {
 				strChar = str[cols * strRow + strCol];
 				/* Next char if cannot draw char */
-				if ((flags & FLAG_DRAW_SKIP_SPACES && strChar == ' ') || shown < randInt(SHOWN_MIN, SHOWN_MAX))
+				if ((drawFlags & FLAG_DRAW_SKIP_SPACES && strChar == ' ') || shown < randInt(SHOWN_MIN, SHOWN_MAX))
 					continue;
 				/* Change char to random fade char */
 				if (shown < SHOWN_MAX && strChar != ' ' && randInt(0, 100) < FADE_RAND_CHANCE)
 					strChar = FADE_RAND_CHARS[randInt(0, FADE_RAND_CHARS_LEN - 1)];
-				mvwaddch(win, y + strRow, x + strCol, (flags & FLAG_DRAW_ACS && strChar == '`') ? ACS_BLOCK : (chtype)strChar);
+				mvwaddch(win, y + strRow, x + strCol, (drawFlags & FLAG_DRAW_ACS && strChar == '`') ? ACS_BLOCK : (chtype)strChar);
 			}
 		}
 	}
@@ -156,19 +156,19 @@ static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str,
 	wattroff(win, attr);
 }
 
-void drawString(const window_t win, const char* str, const dimention_t len, const coord_t y, const coord_t x, const shown_t shown, const flag_t flags)
+void drawString(const window_t win, const char* str, const dimention_t len, const coord_t y, const coord_t x, const shown_t shown, const flag_t drawFlags)
 {
-	drawObject(win.win, win.size, str, 1, len, y, x, shown, flags);
+	drawObject(win.win, win.size, str, 1, len, y, x, shown, drawFlags);
 }
 
-void drawText(const window_t win, const text_t text, const shown_t shown, const flag_t flags)
+void drawText(const window_t win, const text_t text, const shown_t shown, const flag_t drawFlags)
 {
-	drawString(win, text.str, text.len, text.pos.y, text.pos.x, shown, flags);
+	drawString(win, text.str, text.len, text.pos.y, text.pos.x, shown, drawFlags);
 }
 
-void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, const flag_t flags)
+void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, const flag_t drawFlags)
 {
-	drawObject(win.win, win.size, spr.str, spr.size.rows, spr.size.cols, spr.pos.y, spr.pos.x, shown, flags);
+	drawObject(win.win, win.size, spr.str, spr.size.rows, spr.size.cols, spr.pos.y, spr.pos.x, shown, drawFlags);
 }
 
 void initScreen(screen_t *screen, const dimention_t rows, const dimention_t cols)

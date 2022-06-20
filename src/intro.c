@@ -267,7 +267,7 @@ bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 
 void drawIntro(const window_t win, const intro_t i)
 {
-	drawSprite(win, i.center, (i.shown < i.shownCenter) ? i.shown : i.shownCenter, FLAG_DRAW_BOLD + ((i.stage == TITLE) ? FLAG_DRAW_ACS : FLAG_DRAW_NONE));
+	drawSprite(win, i.center, (i.shown < i.shownCenter) ? i.shown : i.shownCenter, FLAG_DRAW_BOLD | ((i.stage == TITLE) ? FLAG_DRAW_ACS : FLAG_DRAW_NONE));
 	drawText(win, i.textTop, (i.shown < i.shownTop) ? i.shown : i.shownTop, FLAG_DRAW_BOLD);
 	drawText(win, i.textBottom, (i.shown < i.shownBottom) ? i.shown : i.shownBottom, FLAG_DRAW_BOLD);
 }

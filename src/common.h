@@ -220,10 +220,10 @@ void initWindow(window_t *win, const window_t *parWin, const coord_t y, const co
 /**
  * Update window contents
  *
- * @param win    Window to update
- * @param flags  Drawing flags
+ * @param win        Window to update
+ * @param drawFlags  Drawing drawFlags
  */
-void updateWindow(const window_t win, const flag_t flags);
+void updateWindow(const window_t win, const flag_t drawFlags);
 
 /**
  * Clear window contents
@@ -265,35 +265,35 @@ void freeScreen(screen_t *screen);
 /**
  * Draw single line string
  *
- * @param win    Window to draw to
- * @param str    String to draw
- * @param len    Length of string
- * @param y      Y-pos of string
- * @param x      X-pos of string
- * @param shown  Percentage (0-100) of string shown
- * @param flags  Drawing flags
+ * @param win        Window to draw to
+ * @param str        String to draw
+ * @param len        Length of string
+ * @param y          Y-pos of string
+ * @param x          X-pos of string
+ * @param shown      Percentage (0-100) of string shown
+ * @param drawFlags  Drawing drawFlags
  */
-void drawString(const window_t win, const char* str, const dimention_t len, const coord_t y, const coord_t x, const shown_t shown, const flag_t flags);
+void drawString(const window_t win, const char* str, const dimention_t len, const coord_t y, const coord_t x, const shown_t shown, const flag_t drawFlags);
 
 /**
  * Draw text object
  *
- * @param win    Window to draw to
- * @param text   Text to draw
- * @param shown  Percentage (0-100) of object shown
- * @param flags  Drawing flags
+ * @param win        Window to draw to
+ * @param text       Text to draw
+ * @param shown      Percentage (0-100) of object shown
+ * @param drawFlags  Drawing drawFlags
  */
-void drawText(const window_t win, const text_t text, const shown_t shown, const flag_t flags);
+void drawText(const window_t win, const text_t text, const shown_t shown, const flag_t drawFlags);
 
 /**
  * Draw sprite object
  *
- * @param win    Window to draw to
- * @param spr    Sprite to draw
- * @param shown  Percentage (0-100) of object shown
- * @param flags  Drawing flags
+ * @param win        Window to draw to
+ * @param spr        Sprite to draw
+ * @param shown      Percentage (0-100) of object shown
+ * @param drawFlags  Drawing drawFlags
  */
-void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, const flag_t flags);
+void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, const flag_t drawFlags);
 
 /**
  * Update fade in/out

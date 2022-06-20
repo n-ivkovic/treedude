@@ -116,7 +116,7 @@ void initEnd(end_t *e)
 	e->showRestart = FALSE_E;
 }
 
-static void setHighScore(end_t *e, score_t *highScore, const score_t score, const flag_t flags)
+static void setHighScore(end_t *e, score_t *highScore, const score_t score, const flag_t mainFlags)
 {
 	char scoreStr[TEXT_SCORE_COLS_MAX];
 
@@ -125,7 +125,7 @@ static void setHighScore(end_t *e, score_t *highScore, const score_t score, cons
 		*highScore = score;
 
 		/* Write to high score file */
-		if (!(flags & FLAG_MAIN_NOHIGHSCOREFILE))
+		if (!(mainFlags & FLAG_MAIN_NOHIGHSCOREFILE))
 			saveHighScore(*highScore);
 
 		/* Set high score text */
@@ -187,13 +187,13 @@ static void setScoreBigText(end_t *e, const score_t score)
 	e->bigNumScore.pos.x = e->bigTextScore.pos.x + BIGTEXT_SCORE_COLS + BIGTEXT_SCORE_PADDING;
 }
 
-bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore, const score_t score, const input_t inp, const flag_t flags)
+bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore, const score_t score, const input_t inp, const flag_t mainFlags)
 {
 	bool_t draw = FALSE_E;
 
 	/* Initialise */
 	if (e->loops == 0) {
-		setHighScore(e, highScore, score, flags);
+		setHighScore(e, highScore, score, mainFlags);
 		setScoreBigText(e, score);
 		e->loops++;
 	}
@@ -240,10 +240,10 @@ bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScor
 
 void drawEnd(const window_t win, const end_t e)
 {
-	drawSprite(win, e.bigTextL, e.shown, FLAG_DRAW_BOLD + FLAG_DRAW_SKIP_SPACES + FLAG_DRAW_ACS);
-	drawSprite(win, e.bigTextR, e.shown, FLAG_DRAW_BOLD + FLAG_DRAW_SKIP_SPACES + FLAG_DRAW_ACS);
-	drawSprite(win, e.bigTextScore, e.shown, FLAG_DRAW_BOLD + FLAG_DRAW_SKIP_SPACES + FLAG_DRAW_ACS);
-	drawSprite(win, e.bigNumScore, e.shown, FLAG_DRAW_BOLD + FLAG_DRAW_SKIP_SPACES + FLAG_DRAW_ACS);
+	drawSprite(win, e.bigTextL, e.shown, FLAG_DRAW_BOLD | FLAG_DRAW_SKIP_SPACES | FLAG_DRAW_ACS);
+	drawSprite(win, e.bigTextR, e.shown, FLAG_DRAW_BOLD | FLAG_DRAW_SKIP_SPACES | FLAG_DRAW_ACS);
+	drawSprite(win, e.bigTextScore, e.shown, FLAG_DRAW_BOLD | FLAG_DRAW_SKIP_SPACES | FLAG_DRAW_ACS);
+	drawSprite(win, e.bigNumScore, e.shown, FLAG_DRAW_BOLD | FLAG_DRAW_SKIP_SPACES | FLAG_DRAW_ACS);
 	drawText(win, e.textHighScore, e.shown, FLAG_DRAW_BOLD);
 
 	if (e.showRestart)

@@ -411,14 +411,14 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	return draw;
 }
 
-static void drawGameWindow(const gameWindow_t gameWin, const flag_t flags)
+static void drawGameWindow(const gameWindow_t gameWin, const flag_t drawFlags)
 {
 	clearWindow(gameWin.win);
-	drawText(gameWin.win, gameWin.text, SHOWN_MAX, flags);
+	drawText(gameWin.win, gameWin.text, SHOWN_MAX, drawFlags);
 	updateWindow(gameWin.win, FLAG_DRAW_NONE);
 }
 
-static void drawTree(const window_t win, const tree_t tree, const shown_t shown, const flag_t flags)
+static void drawTree(const window_t win, const tree_t tree, const shown_t shown, const flag_t drawFlags)
 {
 	treeChunk_t *chunk = tree.base;
 	shown_t chunkShown;
@@ -451,16 +451,16 @@ static void drawTree(const window_t win, const tree_t tree, const shown_t shown,
 			default: break;
 		}
 
-		drawSprite(win, treeTrunk, chunkShown, flags);
+		drawSprite(win, treeTrunk, chunkShown, drawFlags);
 
 		if (chunk->side != NONE)
-			drawSprite(win, treeBranch, chunkShown, flags);
+			drawSprite(win, treeBranch, chunkShown, drawFlags);
 
 		chunk = chunk->next;
 	}
 }
 
-static void drawDude(const window_t win, const side_t side, const gameState_t state, const shown_t shown, const flag_t flags)
+static void drawDude(const window_t win, const side_t side, const gameState_t state, const shown_t shown, const flag_t drawFlags)
 {
 	sprite_t dude;
 
@@ -502,37 +502,37 @@ static void drawDude(const window_t win, const side_t side, const gameState_t st
 		default: break;
 	}
 
-	drawSprite(win, dude, shown, flags + ((state == CHOPPED) ? FLAG_DRAW_SKIP_SPACES : FLAG_DRAW_NONE));
+	drawSprite(win, dude, shown, drawFlags + ((state == CHOPPED) ? FLAG_DRAW_SKIP_SPACES : FLAG_DRAW_NONE));
 }
 
 void drawGame(const window_t win, const game_t g, const stage_t stage)
 {
-	flag_t flags = (stage == GAME && g.state != DEAD) ? FLAG_DRAW_BOLD : FLAG_DRAW_NONE;
+	flag_t drawFlags = (stage == GAME && g.state != DEAD) ? FLAG_DRAW_BOLD : FLAG_DRAW_NONE;
 
-	drawTree(win, g.tree, g.shown, flags);
-	drawTree(win, g.chopped, g.shown, flags);
-	drawDude(win, g.dudeSide, g.state, g.shown, (stage == GAME) ? FLAG_DRAW_BOLD : flags);
+	drawTree(win, g.tree, g.shown, drawFlags);
+	drawTree(win, g.chopped, g.shown, drawFlags);
+	drawDude(win, g.dudeSide, g.state, g.shown, (stage == GAME) ? FLAG_DRAW_BOLD : drawFlags);
 
 	/* Do not draw additional items if player is dead */
 	if (stage != GAME || g.state == DEAD)
 		return;
 
 	if (g.state == CHOPPED)
-		drawString(win, TEXT_CHOP_STR, TEXT_CHOP_LEN, WIN_ROWS - 3 - g.chopTextOffsetY, X_POS_CENTER(TEXT_CHOP_LEN) + 1, g.shown, flags);
+		drawString(win, TEXT_CHOP_STR, TEXT_CHOP_LEN, WIN_ROWS - 3 - g.chopTextOffsetY, X_POS_CENTER(TEXT_CHOP_LEN) + 1, g.shown, drawFlags);
 
 	if (g.showChopDir) {
-		drawString(win, TEXT_CHOP_L_STR, TEXT_CHOP_L_LEN, TEXT_CHOP_DIR_Y, roundToInt((float)(WIN_COLS - TREE_CHUNK_COLS) / 2.0f) - TEXT_CHOP_DIR_PADDING - TEXT_CHOP_L_LEN, g.shown, flags);
-		drawString(win, TEXT_CHOP_R_STR, TEXT_CHOP_R_LEN, TEXT_CHOP_DIR_Y, roundToInt((float)(WIN_COLS + TREE_CHUNK_COLS) / 2.0f) + TEXT_CHOP_DIR_PADDING, g.shown, flags);
+		drawString(win, TEXT_CHOP_L_STR, TEXT_CHOP_L_LEN, TEXT_CHOP_DIR_Y, roundToInt((float)(WIN_COLS - TREE_CHUNK_COLS) / 2.0f) - TEXT_CHOP_DIR_PADDING - TEXT_CHOP_L_LEN, g.shown, drawFlags);
+		drawString(win, TEXT_CHOP_R_STR, TEXT_CHOP_R_LEN, TEXT_CHOP_DIR_Y, roundToInt((float)(WIN_COLS + TREE_CHUNK_COLS) / 2.0f) + TEXT_CHOP_DIR_PADDING, g.shown, drawFlags);
 	}
 
-	drawSprite(win, g.levelBigText, g.levelBigTextShown, flags + FLAG_DRAW_SKIP_SPACES + FLAG_DRAW_ACS);
+	drawSprite(win, g.levelBigText, g.levelBigTextShown, drawFlags | FLAG_DRAW_SKIP_SPACES | FLAG_DRAW_ACS);
 
 	/* Do not draw score and timer windows if the level up text is being shown */
 	if (g.levelBigTextShown > 10)
 		return;
 
-	drawGameWindow(g.winTimer, FLAG_DRAW_ACS + ((g.timer == TIMER_MAX) ? FLAG_DRAW_BOLD : FLAG_DRAW_NONE));
-	drawGameWindow(g.winScore, flags);
+	drawGameWindow(g.winTimer, FLAG_DRAW_ACS | ((g.timer == TIMER_MAX) ? FLAG_DRAW_BOLD : FLAG_DRAW_NONE));
+	drawGameWindow(g.winScore, drawFlags);
 
 	if (g.showWatchTime)
 		drawString(win, TEXT_WATCHTIME_STR, TEXT_WATCHTIME_LEN, WIN_TIMER_Y, X_POS_CENTER(TEXT_WATCHTIME_LEN) + 1, g.shown, FLAG_DRAW_BOLD);
