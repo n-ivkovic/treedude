@@ -89,8 +89,9 @@ void initGame(game_t *g, const screen_t screen);
  * @param score   Current score
  * @param screen  Program screen
  * @param inp     User keyboard input
+ * @returns       Whether a screen draw is required
  */
-void updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen, const input_t inp);
+bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen, const input_t inp);
 
 /**
  * Draw game

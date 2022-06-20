@@ -45,8 +45,9 @@ void initIntro(intro_t *i);
  * @param i      Intro data
  * @param stage  Program stage
  * @param inp    User keyboard input
+ * @returns      Whether a screen draw is required
  */
-void updateIntro(intro_t *i, stage_t *stage, const input_t inp);
+bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp);
 
 /**
  * Draw intro

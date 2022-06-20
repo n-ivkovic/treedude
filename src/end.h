@@ -35,8 +35,9 @@ void initEnd(end_t *e);
  * @param highScore  Highest score achieved
  * @param score      Score achieved
  * @param inp        User keyboard input
+ * @returns          Whether a screen draw is required
  */
-void updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore, const score_t score, const input_t inp, const flag_t flags);
+bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore, const score_t score, const input_t inp, const flag_t flags);
 
 /**
  * Draw end

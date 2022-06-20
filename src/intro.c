@@ -57,18 +57,22 @@ static void progressIntroStage(intro_t *i)
 		i->stage++;
 }
 
-void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
+bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 {
+	bool_t draw = FALSE_E;
+
 	/* Update fade */
 	if (updateFade(&i->fade, &i->shown)) {
 		if (i->fade == OUT_DONE)
 			(*stage) = GAME;
-		return;
+		return TRUE_E;
 	}
 
-	/* Fade out on key press */
-	if (inp == 10) /* Enter */
+	/* Fade out on Enter key press */
+	if (inp == 10) {
 		i->fade = OUT;
+		return FALSE_E;
+	}
 
 	/* Process stages */
 	switch (i->stage) {
@@ -79,8 +83,10 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 
 		case TEXT_TOP:
 			/* Scroll top text */
-			if (i->textTop.len < TEXT_INTRO_TOP_LEN)
+			if (i->textTop.len < TEXT_INTRO_TOP_LEN) {
 				i->textTop.len += (TOP_SCROLL_PER_LOOP > 0) ? TOP_SCROLL_PER_LOOP : 1;
+				draw = TRUE_E;
+			}
 			/* Finish stage */
 			if (i->textTop.len >= TEXT_INTRO_TOP_LEN) {
 				i->textTop.len = TEXT_INTRO_TOP_LEN;
@@ -98,6 +104,7 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 				i->shownCenter = SHOWN_MAX;
 				progressIntroStage(i);
 			}
+			draw = TRUE_E;
 			break;
 
 		case DUDE_CHOP:
@@ -107,12 +114,14 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 					strncpy(i->center.str, DUDE_CHOP_L_STR, DUDE_SIZE);
 					i->center.pos.y--;
 					i->center.pos.x += 2;
+					draw = TRUE_E;
 					break;
 				case 500:
 					/* Set dude to still */
 					strncpy(i->center.str, DUDE_STILL_R_STR, DUDE_SIZE);
 					i->center.pos.y++;
 					i->center.pos.x -= 2;
+					draw = TRUE_E;
 					break;
 				case 1500:
 					/* Finish stage */
@@ -123,8 +132,10 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 
 		case TEXT_BOTTOM:
 			/* Scroll bottom text */
-			if (i->textBottom.len < BOTTOM_SLOW_SCROLL_LEN || i->loops % (LOOPS_PER_SEC / 2) == 0)
+			if (i->textBottom.len < BOTTOM_SLOW_SCROLL_LEN || i->loops % (LOOPS_PER_SEC / 2) == 0) {
 				i->textBottom.len += (i->textBottom.len < BOTTOM_SLOW_SCROLL_LEN && BOTTOM_SCROLL_PER_LOOP > 0) ? BOTTOM_SCROLL_PER_LOOP : 1;
+				draw = TRUE_E;
+			}
 			/* Finish stage */
 			if (i->textBottom.len >= TEXT_INTRO_BOTTOM_LEN) {
 				i->textBottom.len = TEXT_INTRO_BOTTOM_LEN;
@@ -146,6 +157,7 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 					i->shownTop = SHOWN_MIN;
 					i->shownBottom = SHOWN_MIN;
 				}
+				draw = TRUE_E;
 			/* Finish stage */
 			} else {
 				progressIntroStage(i);
@@ -153,6 +165,7 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 			break;
 
 		case TITLE:
+			draw = TRUE_E;
 			switch (MS_SINCE_INTRO_STAGE_START) {
 				case 0:
 					/* Show start text in 7 sec */
@@ -233,7 +246,8 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 					/* Finish stage */
 					progressIntroStage(i);
 					break;
-				default: break;
+				default:
+					draw = FALSE_E;
 			}
 
 			/* Fade in start text */
@@ -241,12 +255,14 @@ void updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 				i->shownBottom += FADE_SPEED;
 				if (i->shownBottom >= SHOWN_MAX)
 					i->shownBottom = SHOWN_MAX;
+				draw = TRUE_E;
 			}
 
 			break;
 	}
 
 	i->loops++;
+	return draw;
 }
 
 void drawIntro(const window_t win, const intro_t i)

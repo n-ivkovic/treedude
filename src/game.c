@@ -256,18 +256,18 @@ static void levelUp(game_t *g, const score_t score)
 	g->levelBigText.pos.x = X_POS_CENTER(g->levelBigText.size.cols);
 }
 
-void updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen, const input_t inp)
+bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen, const input_t inp)
 {
 	treeChunk_t *chunk;
 
 	/* Update fade */
 	if (updateFade(&g->fade, &g->shown)) 
-		return;
+		return TRUE_E;
 
 	/* End after dead for 1s */	
 	if (g->state == DEAD && g->loops >= g->loopDead) {
 		(*stage) = END;
-		return;
+		return FALSE_E;
 	}
 
 	/* Process input */
@@ -388,6 +388,7 @@ void updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen
 		g->showWatchTime = REVERSE(g->showWatchTime, TRUE_E, FALSE_E);
 
 	g->loops++;
+	return TRUE_E;
 }
 
 static void drawGameWindow(const gameWindow_t gameWin, const flag_t flags)

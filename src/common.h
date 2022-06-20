@@ -14,7 +14,7 @@
 
 #define VERSION "1.0.5"
 
-/* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if 20 is too 'jittery' */
+/* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if the terminal 'flickers' too much at 20 */
 #define LOOPS_PER_SEC 20
 #define MS_PER_LOOP (1000 / LOOPS_PER_SEC)
 #define FADE_SPEED (LOOPS_PER_SEC / 2)
@@ -66,6 +66,13 @@
  * @returns    The reverse of the current value
  */
 #define REVERSE(val, a, b) ((val == a) ? b : a)
+
+/**
+ * Return condition as bool_t
+ *
+ * @param cond  Condition
+ */
+#define BOOL(cond) ((cond) ? TRUE_E : FALSE_E)
 
 /**
  * Null out a string

@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
 	flag_t flags = FLAG_MAIN_NONE;
 	input_t input;
 	stage_t stage = INTRO;
+	bool_t draw = TRUE_E;
+	bool_t screenResized = FALSE_E;
 	score_t score = 0, highScore = 0;
 	intro_t intro;
 	end_t end;
@@ -82,7 +84,9 @@ int main(int argc, char *argv[])
 			break;
 
 		/* Term resize */
+		screenResized = FALSE_E;
 		if (LINES != (int)screen.size.rows || COLS != (int)screen.size.cols) {
+			screenResized = TRUE_E;
 			freeScreen(&screen);
 			initScreen(&screen, LINES, COLS);
 			resizeGame(&game, screen);
@@ -91,20 +95,26 @@ int main(int argc, char *argv[])
 		/* Process stages */
 		switch (stage) {
 			case INTRO:
-				updateIntro(&intro, &stage, input);
-				clearWindow(screen.win);
-				drawIntro(screen.win, intro);
+				draw = updateIntro(&intro, &stage, input);
+				if (draw || screenResized) {
+					clearWindow(screen.win);
+					drawIntro(screen.win, intro);
+				}
 				break;
 			case GAME:
-				updateGame(&game, &stage, &score, screen, input);
-				clearWindow(screen.win);
-				drawGame(screen.win, game, stage);
+				draw = updateGame(&game, &stage, &score, screen, input);
+				if (draw || screenResized) {
+					clearWindow(screen.win);
+					drawGame(screen.win, game, stage);
+				}
 				break;
 			case END:
-				updateEnd(&end, &stage, &game.shown, &highScore, score, input, flags);
-				clearWindow(screen.win);
-				drawGame(screen.win, game, stage);
-				drawEnd(screen.win, end);
+				draw = updateEnd(&end, &stage, &game.shown, &highScore, score, input, flags);
+				if (draw || screenResized) {
+					clearWindow(screen.win);
+					drawGame(screen.win, game, stage);
+					drawEnd(screen.win, end);
+				}
 				break;
 			case RESET:
 				freeGame(&game);
@@ -119,7 +129,8 @@ int main(int argc, char *argv[])
 		}
 
 		/* Update main screen */
-		updateScreen(&screen);
+		if (draw || screenResized)
+			updateScreen(&screen);
 
 		/* End loop timer and sleep */
 		timerMs = getEpochMs() - startEpochMs;

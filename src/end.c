@@ -187,7 +187,7 @@ static void setScoreBigText(end_t *e, const score_t score)
 	e->bigNumScore.pos.x = e->bigTextScore.pos.x + BIGTEXT_SCORE_COLS + BIGTEXT_SCORE_PADDING;
 }
 
-void updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore, const score_t score, const input_t inp, const flag_t flags)
+bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore, const score_t score, const input_t inp, const flag_t flags)
 {
 	/* Initialise */
 	if (e->loops == 0) {
@@ -207,12 +207,14 @@ void updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore,
 				break;
 			default: break;
 		}
-		return;
+		return TRUE_E;
 	}
 
-	/* Fade out on key press */
-	if (inp == 10) /* Enter */
+	/* Fade out on Enter key press */
+	if (inp == 10) {
 		e->fade = OUT;
+		return FALSE_E;
+	}
 
 	/* Change big text every 0.75s after 0.5s */
 	if (e->loops > LOOPS_PER_SEC / 2 && (e->loops + LOOPS_PER_SEC / 2) % ((LOOPS_PER_SEC / 4) * 3) == 0) {
@@ -228,6 +230,7 @@ void updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore,
 		e->showRestart = REVERSE(e->showRestart, TRUE_E, FALSE_E);
 
 	e->loops++;
+	return BOOL(e->loops % (LOOPS_PER_SEC / 4) == 0);
 }
 
 void drawEnd(const window_t win, const end_t e)
