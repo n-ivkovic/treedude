@@ -127,7 +127,7 @@ static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str,
 	attr_t attr;
 
 	/* Return if will not be visible if drawn */
-	if (shown <= SHOWN_MIN || cols == 0 || y + (coord_t)rows < 0 || x + (coord_t)cols < 0 || x > (coord_t)winSize.cols)
+	if (shown <= SHOWN_MIN || cols == 0 || y + rows < 0 || x + cols < 0 || x > winSize.cols)
 		return;
 
 	attr = attrFromDrawFlags(drawFlags);
@@ -142,12 +142,17 @@ static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str,
 		} else {
 			for (strCol = 0; strCol < cols && x + strCol <= winSize.cols; strCol++) {
 				strChar = str[cols * strRow + strCol];
-				/* Next char if cannot draw char */
-				if ((drawFlags & FLAG_DRAW_SKIP_SPACES && strChar == ' ') || shown < randInt(SHOWN_MIN, SHOWN_MAX))
+				/* Skip spaces */
+				if (drawFlags & FLAG_DRAW_SKIP_SPACES && strChar == ' ')
 					continue;
-				/* Change char to random fade char */
-				if (shown < SHOWN_MAX && strChar != ' ' && randInt(0, 100) < FADE_RAND_CHANCE)
-					strChar = FADE_RAND_CHARS[randInt(0, FADE_RAND_CHARS_LEN - 1)];
+				if (shown < SHOWN_MAX) {
+					/* Skip hidden char */
+					if (shown < randInt(SHOWN_MIN, SHOWN_MAX))
+						continue;
+					/* Change char to random fade char */
+					if (strChar != ' ' && randInt(0, 100) < FADE_RAND_CHANCE)
+						strChar = FADE_RAND_CHARS[randInt(0, FADE_RAND_CHARS_LEN - 1)];
+				}
 				mvwaddch(win, y + strRow, x + strCol, (drawFlags & FLAG_DRAW_ACS && strChar == '`') ? ACS_BLOCK : (chtype)strChar);
 			}
 		}
