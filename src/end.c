@@ -189,6 +189,8 @@ static void setScoreBigText(end_t *e, const score_t score)
 
 bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScore, const score_t score, const input_t inp, const flag_t flags)
 {
+	bool_t draw = FALSE_E;
+
 	/* Initialise */
 	if (e->loops == 0) {
 		setHighScore(e, highScore, score, flags);
@@ -223,14 +225,17 @@ bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScor
 		else
 			e->bigTextsTopStage++;
 		setBigTextsTop(e);
+		draw = TRUE_E;
 	}
 
 	/* Flash restart every 0.75s */
-	if (e->loops > 0 && e->loops % ((LOOPS_PER_SEC / 4) * 3) == 0)
+	if (e->loops > 0 && e->loops % ((LOOPS_PER_SEC / 4) * 3) == 0) {
 		e->showRestart = REVERSE(e->showRestart, TRUE_E, FALSE_E);
+		draw = TRUE_E;
+	}
 
 	e->loops++;
-	return BOOL(e->loops % (LOOPS_PER_SEC / 4) == 0);
+	return draw;
 }
 
 void drawEnd(const window_t win, const end_t e)

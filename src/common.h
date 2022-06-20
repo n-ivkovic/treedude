@@ -68,13 +68,6 @@
 #define REVERSE(val, a, b) ((val == a) ? b : a)
 
 /**
- * Return condition as bool_t
- *
- * @param cond  Condition
- */
-#define BOOL(cond) ((cond) ? TRUE_E : FALSE_E)
-
-/**
  * Null out a string
  *
  * @param str  String to empty
