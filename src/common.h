@@ -221,7 +221,7 @@ void initWindow(window_t *win, const window_t *parWin, const coord_t y, const co
  * Update window contents
  *
  * @param win        Window to update
- * @param drawFlags  Drawing drawFlags
+ * @param drawFlags  Drawing flags
  */
 void updateWindow(const window_t win, const flag_t drawFlags);
 
@@ -271,7 +271,7 @@ void freeScreen(screen_t *screen);
  * @param y          Y-pos of string
  * @param x          X-pos of string
  * @param shown      Percentage (0-100) of string shown
- * @param drawFlags  Drawing drawFlags
+ * @param drawFlags  Drawing flags
  */
 void drawString(const window_t win, const char* str, const dimention_t len, const coord_t y, const coord_t x, const shown_t shown, const flag_t drawFlags);
 
@@ -281,7 +281,7 @@ void drawString(const window_t win, const char* str, const dimention_t len, cons
  * @param win        Window to draw to
  * @param text       Text to draw
  * @param shown      Percentage (0-100) of object shown
- * @param drawFlags  Drawing drawFlags
+ * @param drawFlags  Drawing flags
  */
 void drawText(const window_t win, const text_t text, const shown_t shown, const flag_t drawFlags);
 
@@ -291,7 +291,7 @@ void drawText(const window_t win, const text_t text, const shown_t shown, const 
  * @param win        Window to draw to
  * @param spr        Sprite to draw
  * @param shown      Percentage (0-100) of object shown
- * @param drawFlags  Drawing drawFlags
+ * @param drawFlags  Drawing flags
  */
 void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, const flag_t drawFlags);
 
