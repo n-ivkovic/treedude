@@ -143,12 +143,6 @@ static void updateScore(const score_t score, const screen_t screen, gameWindow_t
 	}
 }
 
-static void dudeDie(game_t *g)
-{
-	g->state = DEAD;
-	g->loopDead = g->loops + LOOPS_PER_SEC;
-}
-
 void resizeGame(game_t *g, const screen_t screen)
 {
 	freeWindow(&g->winTimer.win);
@@ -216,6 +210,12 @@ void initGame(game_t *g, const screen_t screen)
 	updateScore(0, screen, &g->winScore);
 }
 
+static void dudeDie(game_t *g)
+{
+	g->state = DEAD;
+	g->loopDead = g->loops + LOOPS_PER_SEC;
+}
+
 static void levelUp(game_t *g, const score_t score)
 {
 	g->level++;
@@ -258,6 +258,7 @@ static void levelUp(game_t *g, const score_t score)
 
 bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t screen, const input_t inp)
 {
+	bool_t draw = g->state == CHOPPED;
 	treeChunk_t *chunk;
 
 	/* Update fade */
@@ -301,6 +302,7 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 		/* Side collision */
 		if (g->dudeSide == g->tree.base->side) {
 			dudeDie(g);
+			draw = TRUE_E;
 		/* Chop tree base */
 		} else {
 			/* Move tree base to top of chopped chunks */
@@ -311,8 +313,10 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 		}
 
 		/* Above collision */
-		if (g->dudeSide == g->tree.base->side)
+		if (g->dudeSide == g->tree.base->side) {
 			dudeDie(g);
+			draw = TRUE_E;
+		}
 	}
 
 	/* Successful chop */
@@ -347,6 +351,7 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 		/* Finish chop */
 		if (g->tree.base->pos.y >= TREE_BASE_ROW && g->state != DEAD)
 			g->state = STILL;
+		draw = TRUE_E;
 	}
 
 	/* Update chopped tree chunks */
@@ -355,40 +360,55 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 		chunk->pos.x += ((chunk->pos.x < TREE_CHUNK_X) ? -1 : 1) * 2;
 		chunk->shown -= SHOWN_MAX / (LOOPS_PER_SEC / 5);
 		chunk = chunk->next;
+		draw = TRUE_E;
 	}
 
 	/* Remove hidden chopped tree chunks */
-	while (g->chopped.base && g->chopped.base->shown <= SHOWN_MIN)
+	while (g->chopped.base && g->chopped.base->shown <= SHOWN_MIN) {
 		free(popTree(&g->chopped));
+		draw = TRUE_E;
+	}
+
+	/* Do not update additional items if dead */
+	if (g->state == DEAD) {
+		g->loops++;
+		return draw;
+	}
 
 	/* Decrement timer */
-	if (g->state != DEAD) {
-		if (g->loops % g->timerDecaySpeed == 0) {
-			g->timer--;
-			updateTimer(g->timer, &g->winTimer.text);
-		}
+	if (g->loops % g->timerDecaySpeed == 0) {
+		g->timer--;
+		updateTimer(g->timer, &g->winTimer.text);
 		if (g->timer == 0)
-			dudeDie(g);	
+			dudeDie(g);
+		draw = TRUE_E;
 	}
 
 	/* Update level text */
 	if (g->levelBigTextFade != OUT_DONE) {
-		if ((g->loops == g->loopLevelBigText || g->state == DEAD) && g->levelBigTextFade >= IN_DONE)
+		if (g->loops == g->loopLevelBigText && g->levelBigTextFade >= IN_DONE)
 			g->levelBigTextFade = OUT;
-		if (updateFadeMulti(&g->levelBigTextFade, &g->levelBigTextShown, 2.0f) && g->levelBigTextFade == IN_DONE)
-			g->loopLevelBigText = g->loops + LOOPS_PER_SEC;
+		if (updateFadeMulti(&g->levelBigTextFade, &g->levelBigTextShown, 2.0f)) {
+			if (g->levelBigTextFade == IN_DONE)
+				g->loopLevelBigText = g->loops + LOOPS_PER_SEC;
+			draw = TRUE_E;
+		}
 	}
 
 	/* Flash chop directions text every 0.5s */
-	if ((*score) == 0 && g->state == STILL && g->timer <= TIMER_CHOP_DIR && g->loops > 0 && g->loops % (LOOPS_PER_SEC / 2) == 0)
+	if ((*score) == 0 && g->state == STILL && g->timer <= TIMER_CHOP_DIR && g->loops > 0 && g->loops % (LOOPS_PER_SEC / 2) == 0) {
 		g->showChopDir = REVERSE(g->showChopDir, TRUE_E, FALSE_E);
+		draw = TRUE_E;
+	}
 
 	/* Flash watch time text every 0.25s */
-	if (g->state != DEAD && g->timer <= TIMER_WARN && g->loops % (LOOPS_PER_SEC / 4) == 0)
+	if (g->timer <= TIMER_WARN && g->loops % (LOOPS_PER_SEC / 4) == 0) {
 		g->showWatchTime = REVERSE(g->showWatchTime, TRUE_E, FALSE_E);
+		draw = TRUE_E;
+	}
 
 	g->loops++;
-	return TRUE_E;
+	return draw;
 }
 
 static void drawGameWindow(const gameWindow_t gameWin, const flag_t flags)
