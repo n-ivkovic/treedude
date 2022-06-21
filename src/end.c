@@ -230,7 +230,7 @@ bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScor
 
 	/* Flash restart every 0.75s */
 	if (e->loops > 0 && e->loops % ((LOOPS_PER_SEC / 4) * 3) == 0) {
-		e->showRestart = REVERSE(e->showRestart, TRUE_E, FALSE_E);
+		e->showRestart = !e->showRestart;
 		draw = TRUE_E;
 	}
 

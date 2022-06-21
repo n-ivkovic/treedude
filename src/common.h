@@ -58,16 +58,6 @@
 #define BIGTEXT_DUDE_SIZE (BIGTEXT_ROWS * BIGTEXT_DUDE_COLS + 1)
 
 /**
- * Get the reverse value
- *
- * @param val  Current value
- * @param a    First of two possible values
- * @param b    Second of two possible values
- * @returns    The reverse of the current value
- */
-#define REVERSE(val, a, b) ((val == a) ? b : a)
-
-/**
  * Null out a string
  *
  * @param str  String to empty

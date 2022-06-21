@@ -272,7 +272,7 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	}
 
 	/* Process input */
-	if (g->fade == IN_DONE && g->state == STILL)
+	if (g->state == STILL && g->fade == IN_DONE)
 		switch (inp) {
 			case KEY_LEFT:
 			case 'a':
@@ -294,15 +294,12 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	
 	/* Chop tree */
 	if (g->state == CHOP) {
-		/* Set chop text row */
 		g->chopTextOffsetY = randInt(0, 3);
-		/* Hide chop direction text */
 		g->showChopDir = FALSE_E;
 		
 		/* Side collision */
 		if (g->dudeSide == g->tree.base->side) {
 			dudeDie(g);
-			draw = TRUE_E;
 		/* Chop tree base */
 		} else {
 			/* Move tree base to top of chopped chunks */
@@ -313,10 +310,10 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 		}
 
 		/* Above collision */
-		if (g->dudeSide == g->tree.base->side) {
+		if (g->dudeSide == g->tree.base->side)
 			dudeDie(g);
-			draw = TRUE_E;
-		}
+
+		draw = TRUE_E;
 	}
 
 	/* Successful chop */
@@ -341,17 +338,16 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	}
 
 	/* Move tree */
-	if (g->state != STILL && g->tree.base->pos.y < TREE_BASE_ROW) {
+	if (g->tree.base->pos.y < TREE_BASE_ROW) {
 		chunk = g->tree.base;
 		while (chunk) {
 			chunk->pos.y += TREE_CHUNK_ROWS / TREE_FALL_SPEED;
 			chunk = chunk->next;
+			draw = TRUE_E;
 		}
-
 		/* Finish chop */
-		if (g->tree.base->pos.y >= TREE_BASE_ROW && g->state != DEAD)
+		if (g->state == CHOPPED && g->tree.base->pos.y >= TREE_BASE_ROW)
 			g->state = STILL;
-		draw = TRUE_E;
 	}
 
 	/* Update chopped tree chunks */
@@ -364,10 +360,8 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	}
 
 	/* Remove hidden chopped tree chunks */
-	while (g->chopped.base && g->chopped.base->shown <= SHOWN_MIN) {
+	while (g->chopped.base && g->chopped.base->shown <= SHOWN_MIN)
 		free(popTree(&g->chopped));
-		draw = TRUE_E;
-	}
 
 	/* Do not update additional items if dead */
 	if (g->state == DEAD) {
@@ -386,9 +380,12 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 
 	/* Update level text */
 	if (g->levelBigTextFade != OUT_DONE) {
+		/* Fade out level text */
 		if (g->loops == g->loopLevelBigText && g->levelBigTextFade >= IN_DONE)
 			g->levelBigTextFade = OUT;
+		/* Update level text fade */
 		if (updateFadeMulti(&g->levelBigTextFade, &g->levelBigTextShown, 2.0f)) {
+			/* Fade out in 1s */
 			if (g->levelBigTextFade == IN_DONE)
 				g->loopLevelBigText = g->loops + LOOPS_PER_SEC;
 			draw = TRUE_E;
@@ -396,14 +393,14 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	}
 
 	/* Flash chop directions text every 0.5s */
-	if ((*score) == 0 && g->state == STILL && g->timer <= TIMER_CHOP_DIR && g->loops > 0 && g->loops % (LOOPS_PER_SEC / 2) == 0) {
-		g->showChopDir = REVERSE(g->showChopDir, TRUE_E, FALSE_E);
+	if (g->state == STILL && (*score) == 0 && g->timer <= TIMER_CHOP_DIR && g->loops % (LOOPS_PER_SEC / 2) == 0) {
+		g->showChopDir = !g->showChopDir;
 		draw = TRUE_E;
 	}
 
 	/* Flash watch time text every 0.25s */
 	if (g->timer <= TIMER_WARN && g->loops % (LOOPS_PER_SEC / 4) == 0) {
-		g->showWatchTime = REVERSE(g->showWatchTime, TRUE_E, FALSE_E);
+		g->showWatchTime = !g->showWatchTime;
 		draw = TRUE_E;
 	}
 
@@ -502,7 +499,7 @@ static void drawDude(const window_t win, const side_t side, const gameState_t st
 		default: break;
 	}
 
-	drawSprite(win, dude, shown, drawFlags + ((state == CHOPPED) ? FLAG_DRAW_SKIP_SPACES : FLAG_DRAW_NONE));
+	drawSprite(win, dude, shown, drawFlags | ((state == CHOPPED) ? FLAG_DRAW_SKIP_SPACES : FLAG_DRAW_NONE));
 }
 
 void drawGame(const window_t win, const game_t g, const stage_t stage)
@@ -527,7 +524,7 @@ void drawGame(const window_t win, const game_t g, const stage_t stage)
 
 	drawSprite(win, g.levelBigText, g.levelBigTextShown, drawFlags | FLAG_DRAW_SKIP_SPACES | FLAG_DRAW_ACS);
 
-	/* Do not draw score and timer windows if the level up text is being shown */
+	/* Do not draw additional items if the level up text is at least partially shown */
 	if (g.levelBigTextShown > 10)
 		return;
 
