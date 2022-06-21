@@ -66,7 +66,7 @@ bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 	/* Update fade */
 	if (updateFade(&i->fade, &i->shown)) {
 		if (i->fade == OUT_DONE)
-			(*stage) = GAME;
+			*stage = GAME;
 		return TRUE_E;
 	}
 

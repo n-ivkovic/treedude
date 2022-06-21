@@ -204,10 +204,10 @@ bool_t updateEnd(end_t *e, stage_t *stage, shown_t *gameShown, score_t *highScor
 	if (updateFade(&e->fade, &e->shown)) {
 		switch (e->fade) {
 			case OUT:
-				(*gameShown) = e->shown;
+				*gameShown = e->shown;
 				break;
 			case OUT_DONE:
-				(*stage) = RESET;
+				*stage = RESET;
 				break;
 			default: break;
 		}

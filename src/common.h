@@ -13,9 +13,6 @@
 #define FADE_SPEED (LOOPS_PER_SEC / 2)
 
 #define NEW_LINE "\n"
-#ifndef PATH_MAX
-#define PATH_MAX 0x1000
-#endif
 #define LOOPS_MAX 0x7FFFFFFF /* Max loop_t value */
 #define TEXT_SCORE_COLS_MAX 10 /* Length of max score_t value as a string */
 #define WIN_COLS 64

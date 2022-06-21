@@ -270,7 +270,7 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 
 	/* End after dead for 1s */	
 	if (g->state == DEAD && g->loops >= g->loopDead) {
-		(*stage) = END;
+		*stage = END;
 		return FALSE_E;
 	}
 
@@ -326,9 +326,9 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 		/* Increment timer */
 		if (g->timer < TIMER_MAX) {
 			g->timer++;
-			updateTimer(g->timer, &g->winTimer.text);
 			if (g->timer > TIMER_WARN)
 				g->showWatchTime = FALSE_E;
+			updateTimer(g->timer, &g->winTimer.text);
 		}
 
 		/* Level up */
@@ -375,9 +375,10 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	/* Decrement timer */
 	if (g->loops % g->timerDecaySpeed == 0) {
 		g->timer--;
-		updateTimer(g->timer, &g->winTimer.text);
 		if (g->timer == 0)
 			dudeDie(g);
+		else
+			updateTimer(g->timer, &g->winTimer.text);
 		draw = TRUE_E;
 	}
 
@@ -396,7 +397,7 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	}
 
 	/* Flash chop directions text every 0.5s */
-	if (g->state == STILL && (*score) == 0 && g->timer <= TIMER_CHOP_DIR && g->loops % (LOOPS_PER_SEC / 2) == 0) {
+	if (g->state == STILL && *score == 0 && g->timer <= TIMER_CHOP_DIR && g->loops % (LOOPS_PER_SEC / 2) == 0) {
 		g->showChopDir = !g->showChopDir;
 		draw = TRUE_E;
 	}

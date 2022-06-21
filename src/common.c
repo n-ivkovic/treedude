@@ -12,6 +12,10 @@
 #define SYSCLOCK CLOCK_REALTIME
 #endif
 
+#ifndef PATH_MAX
+#define PATH_MAX 0x1000
+#endif
+
 #define HIGH_SCORE_PATH_DIR "/treedude"
 #define HIGH_SCORE_PATH_FILE "/score"
 #define HIGH_SCORE_PATH "/treedude/score"
