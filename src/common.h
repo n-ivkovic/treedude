@@ -5,7 +5,7 @@
 
 #include <curses.h>
 
-#define VERSION "1.0.6"
+#define VERSION "1.0.7"
 
 /* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if the terminal 'flickers' too much at 20 */
 #define LOOPS_PER_SEC 20
