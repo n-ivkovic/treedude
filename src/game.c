@@ -1,5 +1,8 @@
 #include "game.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 #define WIN_DER_ROWS 3
 #define WIN_TIMER_Y 3
 #define WIN_SCORE_X_PADDING 2

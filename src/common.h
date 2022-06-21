@@ -3,13 +3,6 @@
 
 #define _XOPEN_SOURCE 500 /* SUSv2 (inc. C89/90, POSIX.1-1990, POSIX.2-1992, POSIX.1b-1993, POSIX.1c-1995) */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <sys/stat.h>
-#include <time.h>
-#include <unistd.h>
 #include <curses.h>
 
 #define VERSION "1.0.6"

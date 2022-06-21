@@ -3,7 +3,10 @@
 #include "intro.h"
 #include "game.h"
 #include "end.h"
+
 #include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /* Data that needs to be freed on exit */
 screen_t screen;

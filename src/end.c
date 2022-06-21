@@ -1,5 +1,7 @@
 #include "end.h"
 
+#include <string.h>
+
 #define BIGTEXT_TOP_Y 3
 #define BIGTEXT_SCORE_Y (BIGTEXT_TOP_Y + 1 + BIGTEXT_ROWS)
 #define BIGTEXT_SCORE_PADDING 4

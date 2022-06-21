@@ -1,5 +1,11 @@
 #include "common.h"
 
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <time.h>
+
 #ifdef CLOCK_MONOTONIC
 #define SYSCLOCK CLOCK_MONOTONIC
 #else

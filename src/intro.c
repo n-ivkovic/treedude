@@ -1,5 +1,7 @@
 #include "intro.h"
 
+#include <string.h>
+
 #define TEXT_INTRO_TOP_STR "HIS NAME IS TREEDUDE"
 #define TEXT_INTRO_TOP_LEN strlen(TEXT_INTRO_TOP_STR)
 #define TEXT_INTRO_BOTTOM_STR "AND HIS SONG IS..."
