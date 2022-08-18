@@ -2,7 +2,7 @@
 
 treedude is a clone of [the mini-game from Superhot titled 'Tree Dude Tree Dude Dude'](https://superhot.fandom.com/wiki/Tree_Dude). Chop as much of the tree as you can while avoiding branches and keeping an eye on the timer.
 
-Written in C89/90 with the Curses library, complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/).
+Written in C89/90 with the Curses library and complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/) through to [POSIX.1-2008 (SUSv4)](https://pubs.opengroup.org/onlinepubs/9699919799/).
 
 ![treedude demo gif](.img/treedude.gif)
 
@@ -47,12 +47,12 @@ $ make help
 
 ### Controls
 
-| Key           | Action     |
-| ---           | ---        |
-| `←`, `A`, `H` | Chop left  |
-| `→`, `D`, `L` | Chop right |
-| `Enter`       | Continue   |
-| `Q`, `Esc`    | Quit       |
+| Key           | Action      |
+| ---           | ---         |
+| `←`, `A`, `H` | Chop left.  |
+| `→`, `D`, `L` | Chop right. |
+| `Enter`       | Continue.   |
+| `Q`, `Esc`    | Quit.       |
 
 ### Options
 
@@ -72,8 +72,8 @@ The below are features I may or may not get around to implementing:
 
 Please adhere to the following when creating a pull request:
 
-* Ensure changes do not return any warnings during compile time.
-* Ensure changes are written in C89/90 that complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/) but does not include any features removed from or marked as obsolete in [POSIX.1-2008 (SUSv4)](https://pubs.opengroup.org/onlinepubs/9699919799/).
+* Ensure changes do not cause the compiler to return any warnings or errors.
+* Ensure changes are written in C89/90 that complies with [SUSv2](https://pubs.opengroup.org/onlinepubs/007908799/), but does not utilise features removed from or marked as obsolete in [POSIX.1-2001 (SUSv3)](https://pubs.opengroup.org/onlinepubs/000095399/) or [POSIX.1-2008 (SUSv4)](https://pubs.opengroup.org/onlinepubs/9699919799/). Features in standards newer than SUSv2 may be utilised as long as whether the feature can be utilised on the current system is checked during compile time and the game will still run fine if the feature cannot be utilised.
 * Ensure changes match the general coding style of the project.
 * Ensure changes are branched from `develop` and the pull request merges back into `develop`.
 

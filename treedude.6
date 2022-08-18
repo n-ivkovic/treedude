@@ -1,4 +1,4 @@
-.TH treedude 6 2022-06-18
+.TH treedude 6 2022-08-18
 
 .SH NAME
 \fBtreedude\fR \- a clone of the mini-game from Superhot
@@ -9,21 +9,21 @@
 .SH DESCRIPTION
 \fBtreedude\fR is a clone of the mini-game from Superhot titled 'Tree Dude Tree Dude Dude'. Chop as much of the tree as you can while avoiding branches and keeping an eye on the timer.
 
-Written in C89/90 with the Curses library, complies with \fISUSv2\fR.
+Written in C89/90 with the Curses library, complies with \fISUSv2\fR through to \fIPOSIX.1-2008 (SUSv4)\fR.
 
 .SH CONTROLS
 .TP
 .B LeftArrow, A, H
-Chop left
+Chop left.
 .TP
 .B RightArrow, D, L
-Chop right
+Chop right.
 .TP
 .B Enter
-Continue
+Continue.
 .TP
 .B Q, Esc
-Quit
+Quit.
 
 .SH OPTIONS
 .TP
@@ -35,20 +35,22 @@ Print \fBtreedude\fR version and exit.
 
 .SH ENVIRONMENT
 .TP
-.B XDG_CONFIG_HOME
-The user's high score is located within the directory defined. Uses \f(BI$HOME\fI/.config\fR if not defined in compliance with the \fIXDG Base Directory Specification\fR.
+.B XDG_DATA_HOME
+The user's high score is stored within the set directory. \f(BI$HOME\fI/.config\fR is used if the environment variable is not set or empty. This is in compliance with the \fIXDG Base Directory Specification\fR.
 
 .SH FILES
 .TP
 .I \f(BI$XDG_DATA_HOME\fI/treedude/score\fR
 User's high score.
 
-.SH STANDARDS
+.SH SEE ALSO
+\fBstandards\fR(7).
+
+.SH CONFORMING TO
 .TP
-Single UNIX Specification, Version 2 (SUSv2)
-Includes \fIC89/90\fR, \fIPOSIX.1-1990\fR, \fIPOSIX.2-1992\fR, \fIPOSIX.1b-1993\fR, \fIPOSIX.1c-1995\fR.
+C89, SUSv2, POSIX.1-2001, POSIX.1-2008.
 .TP
-XDG Base Directory Specification
+XDG Base Directory Specification v0.6+.
 
 .SH BUGS
 Bugs and issues can be reported on GitHub or GitLab.
