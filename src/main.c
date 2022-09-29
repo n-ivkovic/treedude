@@ -24,7 +24,7 @@ static void cleanExit(int signal)
 
 int main(int argc, char *argv[])
 {
-	char argOpt;
+	signed char argOpt;
 	long startEpochMs = 0, timerMs = 0;
 	flag_t mainFlags = FLAG_MAIN_NONE;
 	input_t input;
