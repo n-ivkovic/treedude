@@ -195,7 +195,7 @@ void initGame(game_t *g, const screen_t screen)
 	g->levelBigText.pos.y = 3;
 	g->levelBigText.pos.x = 0;
 	g->levelBigTextShown = SHOWN_MIN;
-	g->levelBigTextFade = OUT_DONE;
+	g->levelBigTextFade = OUT;
 
 	/* Timer window */
 	initTimerWindow(screen, &g->winTimer);
@@ -265,7 +265,7 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	treeChunk_t *chunk;
 
 	/* Update fade */
-	if (updateFade(&g->fade, &g->shown)) 
+	if (fadeShown(g->fade, &g->shown))
 		return TRUE_E;
 
 	/* End after dead for 1s */	
@@ -275,7 +275,7 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 	}
 
 	/* Process input */
-	if (g->state == STILL && g->fade == IN_DONE)
+	if (g->state == STILL && fadeDone(g->fade, g->shown))
 		switch (inp) {
 			case KEY_LEFT:
 			case 'a':
@@ -382,18 +382,17 @@ bool_t updateGame(game_t *g, stage_t *stage, score_t *score, const screen_t scre
 		draw = TRUE_E;
 	}
 
-	/* Update level text */
-	if (g->levelBigTextFade != OUT_DONE) {
-		/* Fade out level text */
-		if (g->loops == g->loopLevelBigText && g->levelBigTextFade >= IN_DONE)
-			g->levelBigTextFade = OUT;
-		/* Update level text fade */
-		if (updateFadeMulti(&g->levelBigTextFade, &g->levelBigTextShown, 2.0f)) {
-			/* Fade out in 1s */
-			if (g->levelBigTextFade == IN_DONE)
-				g->loopLevelBigText = g->loops + LOOPS_PER_SEC;
-			draw = TRUE_E;
-		}
+
+	/* Fade out level text */
+	if (g->loops == g->loopLevelBigText)
+		g->levelBigTextFade = OUT;
+
+	/* Update level text fade */
+	if (fadeShownMulti(g->levelBigTextFade, &g->levelBigTextShown, 2.0f)) {
+		/* Once level text is faded in, fade out in 1s */
+		if (fadeDone(IN, g->levelBigTextShown))
+			g->loopLevelBigText = g->loops + LOOPS_PER_SEC;
+		draw = TRUE_E;
 	}
 
 	/* Flash chop directions text every 0.5s */

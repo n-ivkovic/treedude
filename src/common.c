@@ -22,6 +22,7 @@
 #define HIGH_SCORE_PATH_DIR_PERMISSIONS S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
 #define HIGH_SCORE_FILE_FORMAT "%lx"
 
+#define FADE_SPEED (LOOPS_PER_SEC / 2)
 #define FADE_RAND_CHANCE 15
 #define FADE_RAND_CHARS "`#-"
 #define FADE_RAND_CHARS_LEN strlen(FADE_RAND_CHARS)
@@ -210,30 +211,33 @@ void freeScreen(screen_t *screen)
 	freeWindow(&screen->win);
 }
 
-bool_t updateFadeMulti(fade_t *fade, shown_t *shown, const float multi)
+bool_t fadeShownMulti(fade_t fade, shown_t *shown, const float multi)
 {
 	/* Exit if done */
-	if ((*fade == IN_DONE && *shown >= SHOWN_MAX) || (*fade == OUT_DONE && *shown <= SHOWN_MIN))
+	if (fadeDone(fade, *shown))
 		return FALSE_E;
 
 	/* Update shown */
-	*shown += FADE_SPEED * (shown_t)(((*fade == OUT) ? -1.0f : 1.0f) * multi);
+	*shown += FADE_SPEED * (shown_t)(((fade == OUT) ? -1.0f : 1.0f) * multi);
 
-	/* Done */
-	if (*fade == IN && *shown >= SHOWN_MAX) {
-		*fade = IN_DONE;
+	/* Set shown to within range */
+	if (*shown > SHOWN_MAX) {
 		*shown = SHOWN_MAX;
-	} else if (*fade == OUT && *shown <= SHOWN_MIN) {
-		*fade = OUT_DONE;
+	} else if (*shown < SHOWN_MIN) {
 		*shown = SHOWN_MIN;
 	}
 
 	return TRUE_E;
 }
 
-bool_t updateFade(fade_t *fade, shown_t *shown)
+bool_t fadeShown(fade_t fade, shown_t *shown)
 {
-	return updateFadeMulti(fade, shown, 1.0f);
+	return fadeShownMulti(fade, shown, 1.0f);
+}
+
+bool_t fadeDone(fade_t fade, shown_t shown)
+{
+	return ((fade == IN && shown == SHOWN_MAX) || (fade == OUT && shown == SHOWN_MIN));
 }
 
 static bool_t dirExists(const char *path)

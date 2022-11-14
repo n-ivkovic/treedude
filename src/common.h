@@ -10,7 +10,6 @@
 /* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if the terminal 'flickers' too much at 20 */
 #define LOOPS_PER_SEC 20
 #define MS_PER_LOOP (1000 / LOOPS_PER_SEC)
-#define FADE_SPEED (LOOPS_PER_SEC / 2)
 
 #define NEW_LINE "\n"
 #define LOOPS_MAX 0x7FFFFFFF /* Max loop_t value */
@@ -131,12 +130,10 @@ typedef struct sprite {
 	position_t pos;
 } sprite_t;
 
-/* Object fade stages */
+/* Object fade direction */
 typedef enum {
 	IN,
-	IN_DONE,
-	OUT,
-	OUT_DONE
+	OUT
 } fade_t;
 
 /**
@@ -276,23 +273,32 @@ void drawText(const window_t win, const text_t text, const shown_t shown, const 
 void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, const flag_t drawFlags);
 
 /**
- * Update fade in/out
+ * Fade in or out visibility of object
  *
- * @param fade   Fade state to update
- * @param shown  Percentage (0-100) of object to show during fade
+ * @param fade   Fade direction
+ * @param shown  Percentage (0-100) of object visible
  * @param multi  Multiplier of fade speed
  * @returns      Whether fade has been updated 
  */
-bool_t updateFadeMulti(fade_t *fade, shown_t *shown, const float multi);
+bool_t fadeShownMulti(fade_t fade, shown_t *shown, const float multi);
 
 /**
- * Update fade in/out
+ * Fade in or out visibility of object
  *
- * @param fade   Fade state to update
- * @param shown  Percentage (0-100) of object to show during fade
+ * @param fade   Fade direction
+ * @param shown  Percentage (0-100) of object visible
  * @returns      Whether fade has been updated
  */
-bool_t updateFade(fade_t *fade, shown_t *shown);
+bool_t fadeShown(fade_t fade, shown_t *shown);
+
+/**
+ * Check if fade in or out of object visibility is done
+ *
+ * @param fade   Fade direction
+ * @param shown  Percentage (0-100) of object visible
+ * @returns      Whether fade is completed
+ */
+bool_t fadeDone(fade_t fade, shown_t shown);
 
 /**
  * Load high score from file

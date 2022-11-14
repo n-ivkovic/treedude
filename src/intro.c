@@ -23,8 +23,8 @@ void initIntro(intro_t *i)
 	i->loopStageStart = 0;
 	i->loopStart = LOOPS_MAX;
 
-	i->fade = IN_DONE;
-	i->shown = SHOWN_MIN;
+	i->fade = IN;
+	i->shown = SHOWN_MAX;
 	i->shownCenter = SHOWN_MIN;
 	i->shownTop = SHOWN_MAX;
 	i->shownBottom = SHOWN_MAX;
@@ -61,11 +61,11 @@ static void progressIntroStage(intro_t *i)
 
 bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 {
-	bool_t draw = FALSE_E;
+	bool_t draw = i->loops == 0;
 
 	/* Update fade */
-	if (updateFade(&i->fade, &i->shown)) {
-		if (i->fade == OUT_DONE)
+	if (fadeShown(i->fade, &i->shown)) {
+		if (i->fade == OUT && fadeDone(i->fade, i->shown))
 			*stage = GAME;
 		return TRUE_E;
 	}
@@ -101,11 +101,9 @@ bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 			if (MS_SINCE_INTRO_STAGE_START < 250)
 				break;
 			/* Fade in dude */
-			i->shownCenter += FADE_SPEED;
-			if (i->shownCenter >= SHOWN_MAX) {
-				i->shownCenter = SHOWN_MAX;
+			fadeShown(IN, &i->shownCenter);
+			if (fadeDone(IN, i->shownCenter))
 				progressIntroStage(i);
-			}
 			draw = TRUE_E;
 			break;
 
@@ -150,15 +148,10 @@ bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 			if (MS_SINCE_INTRO_STAGE_START < 1250)
 				break;
 			/* Fade out all */
-			if (i->shownCenter > SHOWN_MIN || i->shownTop > SHOWN_MIN || i->shownBottom > SHOWN_MIN) {
-				i->shownCenter -= FADE_SPEED;
-				i->shownTop -= FADE_SPEED;
-				i->shownBottom -= FADE_SPEED;
-				if (i->shownCenter < SHOWN_MIN || i->shownTop < SHOWN_MIN || i->shownBottom < SHOWN_MIN) {
-					i->shownCenter = SHOWN_MIN;
-					i->shownTop = SHOWN_MIN;
-					i->shownBottom = SHOWN_MIN;
-				}
+			if (!fadeDone(OUT, i->shownTop) || !fadeDone(OUT, i->shownCenter) || !fadeDone(OUT, i->shownBottom)) {
+				fadeShown(OUT, &i->shownTop);
+				fadeShown(OUT, &i->shownCenter);
+				fadeShown(OUT, &i->shownBottom);
 				draw = TRUE_E;
 			/* Finish stage */
 			} else {
@@ -254,9 +247,7 @@ bool_t updateIntro(intro_t *i, stage_t *stage, const input_t inp)
 
 			/* Fade in start text */
 			if (i->loops - i->loopStart >= 0 && i->shownBottom < SHOWN_MAX) {
-				i->shownBottom += FADE_SPEED;
-				if (i->shownBottom >= SHOWN_MAX)
-					i->shownBottom = SHOWN_MAX;
+				fadeShown(IN, &i->shownBottom);
 				draw = TRUE_E;
 			}
 
