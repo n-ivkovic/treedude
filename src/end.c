@@ -120,14 +120,14 @@ void initEnd(end_t *e)
 
 static void setHighScore(end_t *e, score_t *highScore, const score_t score, const flag_t mainFlags)
 {
-	char scoreStr[TEXT_SCORE_COLS_MAX];
+	char scoreStr[SCORE_STR_MAX];
 
 	/* Set new high score */
 	if (score > *highScore) {
 		*highScore = score;
 
 		/* Write to high score file */
-		if (!(mainFlags & FLAG_MAIN_NOHIGHSCOREFILE))
+		if (mainFlags & FLAG_MAIN_WRITE_HIGH_SCORE)
 			saveHighScore(*highScore);
 
 		/* Set high score text */
@@ -149,7 +149,7 @@ static void setHighScore(end_t *e, score_t *highScore, const score_t score, cons
 
 static void setScoreBigText(end_t *e, const score_t score)
 {
-	char scoreStr[TEXT_SCORE_COLS_MAX];
+	char scoreStr[SCORE_STR_MAX];
 	char bigTextStr[SPRITE_STR_MAX];
 	size_t rowInd, numInd, scoreLen, bigTextCols;
 

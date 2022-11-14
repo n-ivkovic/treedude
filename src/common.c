@@ -83,7 +83,7 @@ static attr_t attrFromDrawFlags(flag_t drawFlags)
 		return A_NORMAL;
 }
 
-void initDisplay(void)
+void initTerm(void)
 {
 	initscr();
 	cbreak();
@@ -93,7 +93,7 @@ void initDisplay(void)
 	curs_set(0);
 }
 
-void freeDisplay(void)
+void freeTerm(void)
 {
 	endwin();
 }
@@ -240,9 +240,11 @@ static bool_t dirExists(const char *path)
 {
 	struct stat stats;
 
+	/* Check path exists */
 	if (stat(path, &stats) != 0)
 		return FALSE_E;
 
+	/* Check path is a directory */
 	if (S_ISDIR(stats.st_mode) == 0)
 		return FALSE_E;
 

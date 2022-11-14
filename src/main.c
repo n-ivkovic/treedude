@@ -17,7 +17,7 @@ static void cleanExit(int signal)
 {
 	freeGame(&game);
 	freeScreen(&screen);
-	freeDisplay();
+	freeTerm();
 
 	exit(signal);
 }
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 {
 	char argOpt;
 	long startEpochMs = 0, timerMs = 0;
-	flag_t mainFlags = FLAG_MAIN_NONE;
+	flag_t mainFlags = FLAG_MAIN_WRITE_HIGH_SCORE;
 	input_t input;
 	stage_t stage = INTRO;
 	bool_t draw = TRUE_E;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 				cleanExit(EXIT_SUCCESS);
 				break;
 			case 'n':
-				mainFlags |= FLAG_MAIN_NOHIGHSCOREFILE;
+				mainFlags &= ~FLAG_MAIN_WRITE_HIGH_SCORE;
 				break;
 			case '?':
 			default:
@@ -61,13 +61,13 @@ int main(int argc, char *argv[])
 
 	/* Initialise */
 	initRandSeed();
-	initDisplay();
+	initTerm();
 	initScreen(&screen, LINES, COLS);
 	initIntro(&intro);
 	initGame(&game, screen);
 	initEnd(&end);
 
-	if (!(mainFlags & FLAG_MAIN_NOHIGHSCOREFILE))
+	if (mainFlags & FLAG_MAIN_WRITE_HIGH_SCORE)
 		highScore = loadHighScore();
 
 	while (stage != QUIT) { 

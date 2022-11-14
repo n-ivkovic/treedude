@@ -14,15 +14,15 @@
 
 #define NEW_LINE "\n"
 #define LOOPS_MAX 0x7FFFFFFF /* Max loop_t value */
-#define TEXT_SCORE_COLS_MAX 10 /* Length of max score_t value as a string */
 #define WIN_COLS 64
 #define WIN_ROWS 24
 #define SHOWN_MIN 0
 #define SHOWN_MAX 100
 #define SPRITE_STR_MAX ((WIN_COLS * WIN_ROWS) / 4) /* Sprites are not larger than 1/4 of the main window */
+#define SCORE_STR_MAX 10 /* Length of max score_t value as a string */
 
-#define FLAG_MAIN_NONE            0x00
-#define FLAG_MAIN_NOHIGHSCOREFILE 0x01
+#define FLAG_MAIN_NONE             0x00
+#define FLAG_MAIN_WRITE_HIGH_SCORE 0x01
 
 #define FLAG_DRAW_NONE        0x00
 #define FLAG_DRAW_BOLD        0x01
@@ -178,12 +178,12 @@ int roundToInt(float val);
 /**
  * Initialise display
  */
-void initDisplay(void);
+void initTerm(void);
 
 /**
  * Free display
  */
-void freeDisplay(void);
+void freeTerm(void);
 
 /**
  * Initialise window
