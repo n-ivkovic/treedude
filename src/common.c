@@ -84,53 +84,6 @@ static attr_t attrFromDrawFlags(flag_t drawFlags)
 		return A_NORMAL;
 }
 
-void initTerm(void)
-{
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr, TRUE);
-	nodelay(stdscr, TRUE);
-	curs_set(0);
-}
-
-void freeTerm(void)
-{
-	endwin();
-}
-
-void initWindow(window_t *win, const window_t *parWin, const coord_t y, const coord_t x, const dimention_t rows, const dimention_t cols)
-{
-	window_t newWin;
-	newWin.win = (parWin) ? derwin(parWin->win, rows, cols, y, x) : newwin(rows, cols, y, x);
-	newWin.size.rows = rows;
-	newWin.size.cols = cols;
-	newWin.pos.y = y;
-	newWin.pos.x = x;
-	*win = newWin;
-}
-
-void updateWindow(const window_t win, const flag_t drawFlags)
-{
-	attr_t attr = attrFromDrawFlags(drawFlags);
-
-	wattron(win.win, attr);
-	box(win.win, 0, 0);
-	wattroff(win.win, attr);
-	wnoutrefresh(win.win);
-}
-
-void clearWindow(const window_t win)
-{
-	wclear(win.win);
-}
-
-void freeWindow(window_t *win)
-{
-	clearWindow(*win);
-	delwin(win->win);
-}
-
 static void drawObject(WINDOW *win, const dimentions_t winSize, const char *str, const dimention_t rows, const dimention_t cols, const coord_t y, const coord_t x, const shown_t shown, const flag_t drawFlags)
 {
 	char strChar;
@@ -187,28 +140,101 @@ void drawSprite(const window_t win, const sprite_t spr, const shown_t shown, con
 	drawObject(win.win, win.size, spr.str, spr.size.rows, spr.size.cols, spr.pos.y, spr.pos.x, shown, drawFlags);
 }
 
-void initScreen(screen_t *screen, const dimention_t rows, const dimention_t cols)
+void initWindow(window_t *win, const window_t *parWin, const coord_t y, const coord_t x, const dimention_t rows, const dimention_t cols)
 {
-	screen->size.rows = rows;
-	screen->size.cols = cols;
-	initWindow(&screen->win, NULL, roundToInt((float)(rows - WIN_ROWS) / 2.0f), roundToInt((float)(cols - WIN_COLS) / 2.0f), WIN_ROWS, WIN_COLS);
+	window_t newWin;
+	newWin.win = (parWin) ? derwin(parWin->win, rows, cols, y, x) : newwin(rows, cols, y, x);
+	newWin.size.rows = rows;
+	newWin.size.cols = cols;
+	newWin.pos.y = y;
+	newWin.pos.x = x;
+	*win = newWin;
+}
+
+void updateWindow(const window_t win, const flag_t drawFlags)
+{
+	attr_t attr = attrFromDrawFlags(drawFlags);
+
+	wattron(win.win, attr);
+	box(win.win, 0, 0);
+	wattroff(win.win, attr);
+	wnoutrefresh(win.win);
+}
+
+void clearWindow(const window_t win)
+{
+	wclear(win.win);
+}
+
+void freeWindow(window_t *win)
+{
+	clearWindow(*win);
+	delwin(win->win);
+}
+
+static void initScreenData(screen_t *screen)
+{
+	getmaxyx(stdscr, screen->size.rows, screen->size.cols);
+	initWindow(&screen->win, NULL, roundToInt((float)(screen->size.rows - WIN_ROWS) / 2.0f), roundToInt((float)(screen->size.cols - WIN_COLS) / 2.0f), WIN_ROWS, WIN_COLS);
+}
+
+static void freeScreenData(screen_t *screen)
+{
+	clear();
+	freeWindow(&screen->win);
+}
+
+void initScreen(screen_t *screen)
+{
+	/* Start curses */
+	initscr();
+	cbreak();
+	noecho();
+	keypad(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
+	curs_set(0);
+
+	initScreenData(screen);
+}
+
+bool_t resizeScreenRequired(const screen_t screen)
+{
+	dimentions_t size;
+
+	getmaxyx(stdscr, size.rows, size.cols);
+
+	return size.rows != screen.size.rows || size.cols != screen.size.cols;
+}
+
+void resizeScreen(screen_t *screen)
+{
+	freeScreenData(screen);
+	initScreenData(screen);
+	updateScreen(screen);
 }
 
 void updateScreen(screen_t *screen)
 {
 	updateWindow(screen->win, FLAG_DRAW_DIM);
+
+	/* Draw top left screen window text */
 	drawObject(stdscr, screen->size, TEXT_SCREEN_TOP_1_STR, 1, TEXT_SCREEN_TOP_1_LEN, screen->win.pos.y, screen->win.pos.x + TEXT_SCREEN_X_OFFSET, SHOWN_MAX, FLAG_DRAW_BOLD);
 	drawObject(stdscr, screen->size, VERSION, 1, TEXT_SCREEN_VERSION_LEN, screen->win.pos.y, screen->win.pos.x + TEXT_SCREEN_X_OFFSET + TEXT_SCREEN_TOP_1_LEN, SHOWN_MAX, FLAG_DRAW_BOLD);
 	drawObject(stdscr, screen->size, TEXT_SCREEN_TOP_2_STR, 1, TEXT_SCREEN_TOP_2_LEN, screen->win.pos.y, screen->win.pos.x + TEXT_SCREEN_X_OFFSET + TEXT_SCREEN_TOP_1_LEN + TEXT_SCREEN_VERSION_LEN, SHOWN_MAX, FLAG_DRAW_BOLD);
+
+	/* Draw bottom right screen window text */
 	drawObject(stdscr, screen->size, TEXT_SCREEN_BOTTOM_STR, 1, TEXT_SCREEN_BOTTOM_LEN, screen->win.pos.y + WIN_ROWS - 1, screen->win.pos.x + WIN_COLS - TEXT_SCREEN_BOTTOM_LEN - TEXT_SCREEN_X_OFFSET, SHOWN_MAX, FLAG_DRAW_NONE);
+
 	wnoutrefresh(stdscr);
 	doupdate();
 }
 
 void freeScreen(screen_t *screen)
 {
-	clear();
-	freeWindow(&screen->win);
+	freeScreenData(screen);
+
+	/* End curses */
+	endwin();
 }
 
 bool_t fadeShownMulti(fade_t fade, shown_t *shown, const float multi)

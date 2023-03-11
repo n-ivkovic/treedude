@@ -66,20 +66,20 @@ typedef struct game {
 } game_t;
 
 /**
- * Update game data on term resize
- *
- * @param g       Game data
- * @param screen  Program screen
- */
-void resizeGame(game_t *g, const screen_t screen);
-
-/**
  * Initialise game data
  *
  * @param g       Game data to initialise
  * @param screen  Program screen
  */
 void initGame(game_t *g, const screen_t screen);
+
+/**
+ * Update game data on terminal resize
+ *
+ * @param g       Game data
+ * @param screen  Program screen
+ */
+void resizeGame(game_t *g, const screen_t screen);
 
 /**
  * Update game

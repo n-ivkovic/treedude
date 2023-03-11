@@ -5,7 +5,7 @@
 
 #include <curses.h>
 
-#define VERSION "1.0.7"
+#define VERSION "1.0.8"
 
 /* Loops per sec must be >= 12 and divisible by 4. Decrease to 16 if the terminal 'flickers' too much at 20 */
 #define LOOPS_PER_SEC 20
@@ -173,14 +173,39 @@ int randInt(int min, int max);
 int roundToInt(float val);
 
 /**
- * Initialise display
+ * Initialise program screen
+ *
+ * @param screen  Program screen to initialise
  */
-void initTerm(void);
+void initScreen(screen_t *screen);
 
 /**
- * Free display
+ * Get whether a terminal resize has occurred and a program screen resize is required
+ *
+ * @param screen  Program screen to check
  */
-void freeTerm(void);
+bool_t resizeScreenRequired(const screen_t screen);
+
+/**
+ * Resize program screen on terminal resize
+ *
+ * @param screen  Program screen to resize
+ */
+void resizeScreen(screen_t *screen);
+
+/**
+ * Update program screen contents
+ *
+ * @param screen  Program screen to update
+ */
+void updateScreen(screen_t *screen);
+
+/**
+ * Free program screen memory
+ *
+ * @param screen  Program screen to free
+ */
+void freeScreen(screen_t *screen);
 
 /**
  * Initialise window
@@ -215,29 +240,6 @@ void clearWindow(const window_t win);
  * @param win  Window to free
  */
 void freeWindow(window_t *win);
-
-/**
- * Initialise screen
- *
- * @param screen  Screen to initalise
- * @param rows    Number of rows in screen
- * @param cols    Number of columns in screen
- */
-void initScreen(screen_t *screen, const dimention_t rows, const dimention_t cols);
-
-/**
- * Update screen contents
- *
- * @param screen  Screen to update
- */
-void updateScreen(screen_t *screen);
-
-/**
- * Free screen memory 
- *
- * @param screen  Screen to free
- */
-void freeScreen(screen_t *screen);
 
 /**
  * Draw single line string
