@@ -23,7 +23,7 @@ static void cleanExit(int signal)
 
 int main(int argc, char *argv[])
 {
-	char argOpt;
+	int argOpt;
 	long startEpochMs = 0, timerMs = 0;
 	flag_t mainFlags = FLAG_MAIN_WRITE_HIGH_SCORE;
 	input_t input;
